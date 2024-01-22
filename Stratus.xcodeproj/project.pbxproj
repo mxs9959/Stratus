@@ -1,0 +1,639 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		27FAECF02B0E6E1300DF612D /* StratusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAECEF2B0E6E1300DF612D /* StratusApp.swift */; };
+		27FAECF22B0E6E1300DF612D /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAECF12B0E6E1300DF612D /* Home.swift */; };
+		27FAECF42B0E6E1400DF612D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27FAECF32B0E6E1400DF612D /* Assets.xcassets */; };
+		27FAECF72B0E6E1400DF612D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27FAECF62B0E6E1400DF612D /* Preview Assets.xcassets */; };
+		27FAED012B0E6E1400DF612D /* StratusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED002B0E6E1400DF612D /* StratusTests.swift */; };
+		27FAED0B2B0E6E1400DF612D /* StratusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED0A2B0E6E1400DF612D /* StratusUITests.swift */; };
+		27FAED0D2B0E6E1400DF612D /* StratusUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED0C2B0E6E1400DF612D /* StratusUITestsLaunchTests.swift */; };
+		27FAED1E2B0E6F4D00DF612D /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED1D2B0E6F4D00DF612D /* Template.swift */; };
+		27FAED202B0E7AA600DF612D /* Strat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED1F2B0E7AA600DF612D /* Strat.swift */; };
+		27FAED222B0E7C5200DF612D /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED212B0E7C5100DF612D /* DateTime.swift */; };
+		27FAED272B0EB2B800DF612D /* Strata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED262B0EB2B800DF612D /* Strata.swift */; };
+		27FAED292B0F934400DF612D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED282B0F934400DF612D /* Settings.swift */; };
+		27FAED2D2B0FA1BF00DF612D /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED2C2B0FA1BF00DF612D /* Templates.swift */; };
+		27FAED332B104F3600DF612D /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED322B104F3600DF612D /* Consts.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		27FAECFD2B0E6E1400DF612D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27FAECE42B0E6E1300DF612D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27FAECEB2B0E6E1300DF612D;
+			remoteInfo = Stratus;
+		};
+		27FAED072B0E6E1400DF612D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27FAECE42B0E6E1300DF612D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27FAECEB2B0E6E1300DF612D;
+			remoteInfo = Stratus;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		27FAECEC2B0E6E1300DF612D /* Stratus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stratus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		27FAECEF2B0E6E1300DF612D /* StratusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratusApp.swift; sourceTree = "<group>"; };
+		27FAECF12B0E6E1300DF612D /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		27FAECF32B0E6E1400DF612D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		27FAECF62B0E6E1400DF612D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		27FAECFC2B0E6E1400DF612D /* StratusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StratusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27FAED002B0E6E1400DF612D /* StratusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratusTests.swift; sourceTree = "<group>"; };
+		27FAED062B0E6E1400DF612D /* StratusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StratusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27FAED0A2B0E6E1400DF612D /* StratusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratusUITests.swift; sourceTree = "<group>"; };
+		27FAED0C2B0E6E1400DF612D /* StratusUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratusUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		27FAED1D2B0E6F4D00DF612D /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
+		27FAED1F2B0E7AA600DF612D /* Strat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strat.swift; sourceTree = "<group>"; };
+		27FAED212B0E7C5100DF612D /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
+		27FAED252B0E84BA00DF612D /* Stratus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stratus-Bridging-Header.h"; sourceTree = "<group>"; };
+		27FAED262B0EB2B800DF612D /* Strata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strata.swift; sourceTree = "<group>"; };
+		27FAED282B0F934400DF612D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		27FAED2C2B0FA1BF00DF612D /* Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
+		27FAED322B104F3600DF612D /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		27FAECE92B0E6E1300DF612D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27FAECF92B0E6E1400DF612D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27FAED032B0E6E1400DF612D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		27FAECE32B0E6E1300DF612D = {
+			isa = PBXGroup;
+			children = (
+				27FAECEE2B0E6E1300DF612D /* Stratus */,
+				27FAECFF2B0E6E1400DF612D /* StratusTests */,
+				27FAED092B0E6E1400DF612D /* StratusUITests */,
+				27FAECED2B0E6E1300DF612D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		27FAECED2B0E6E1300DF612D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				27FAECEC2B0E6E1300DF612D /* Stratus.app */,
+				27FAECFC2B0E6E1400DF612D /* StratusTests.xctest */,
+				27FAED062B0E6E1400DF612D /* StratusUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		27FAECEE2B0E6E1300DF612D /* Stratus */ = {
+			isa = PBXGroup;
+			children = (
+				27FAECEF2B0E6E1300DF612D /* StratusApp.swift */,
+				27FAED2E2B0FADD800DF612D /* Views */,
+				27FAED2F2B0FADF200DF612D /* Objects */,
+				27FAED252B0E84BA00DF612D /* Stratus-Bridging-Header.h */,
+				27FAECF32B0E6E1400DF612D /* Assets.xcassets */,
+				27FAECF52B0E6E1400DF612D /* Preview Content */,
+			);
+			path = Stratus;
+			sourceTree = "<group>";
+		};
+		27FAECF52B0E6E1400DF612D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				27FAECF62B0E6E1400DF612D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		27FAECFF2B0E6E1400DF612D /* StratusTests */ = {
+			isa = PBXGroup;
+			children = (
+				27FAED002B0E6E1400DF612D /* StratusTests.swift */,
+			);
+			path = StratusTests;
+			sourceTree = "<group>";
+		};
+		27FAED092B0E6E1400DF612D /* StratusUITests */ = {
+			isa = PBXGroup;
+			children = (
+				27FAED0A2B0E6E1400DF612D /* StratusUITests.swift */,
+				27FAED0C2B0E6E1400DF612D /* StratusUITestsLaunchTests.swift */,
+			);
+			path = StratusUITests;
+			sourceTree = "<group>";
+		};
+		27FAED2E2B0FADD800DF612D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				27FAECF12B0E6E1300DF612D /* Home.swift */,
+				27FAED2C2B0FA1BF00DF612D /* Templates.swift */,
+				27FAED282B0F934400DF612D /* Settings.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		27FAED2F2B0FADF200DF612D /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				27FAED322B104F3600DF612D /* Consts.swift */,
+				27FAED262B0EB2B800DF612D /* Strata.swift */,
+				27FAED1F2B0E7AA600DF612D /* Strat.swift */,
+				27FAED1D2B0E6F4D00DF612D /* Template.swift */,
+				27FAED212B0E7C5100DF612D /* DateTime.swift */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		27FAECEB2B0E6E1300DF612D /* Stratus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27FAED102B0E6E1400DF612D /* Build configuration list for PBXNativeTarget "Stratus" */;
+			buildPhases = (
+				27FAECE82B0E6E1300DF612D /* Sources */,
+				27FAECE92B0E6E1300DF612D /* Frameworks */,
+				27FAECEA2B0E6E1300DF612D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Stratus;
+			productName = Stratus;
+			productReference = 27FAECEC2B0E6E1300DF612D /* Stratus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		27FAECFB2B0E6E1400DF612D /* StratusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27FAED132B0E6E1400DF612D /* Build configuration list for PBXNativeTarget "StratusTests" */;
+			buildPhases = (
+				27FAECF82B0E6E1400DF612D /* Sources */,
+				27FAECF92B0E6E1400DF612D /* Frameworks */,
+				27FAECFA2B0E6E1400DF612D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				27FAECFE2B0E6E1400DF612D /* PBXTargetDependency */,
+			);
+			name = StratusTests;
+			productName = StratusTests;
+			productReference = 27FAECFC2B0E6E1400DF612D /* StratusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		27FAED052B0E6E1400DF612D /* StratusUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27FAED162B0E6E1400DF612D /* Build configuration list for PBXNativeTarget "StratusUITests" */;
+			buildPhases = (
+				27FAED022B0E6E1400DF612D /* Sources */,
+				27FAED032B0E6E1400DF612D /* Frameworks */,
+				27FAED042B0E6E1400DF612D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				27FAED082B0E6E1400DF612D /* PBXTargetDependency */,
+			);
+			name = StratusUITests;
+			productName = StratusUITests;
+			productReference = 27FAED062B0E6E1400DF612D /* StratusUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		27FAECE42B0E6E1300DF612D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					27FAECEB2B0E6E1300DF612D = {
+						CreatedOnToolsVersion = 15.0;
+						LastSwiftMigration = 1500;
+					};
+					27FAECFB2B0E6E1400DF612D = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 27FAECEB2B0E6E1300DF612D;
+					};
+					27FAED052B0E6E1400DF612D = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 27FAECEB2B0E6E1300DF612D;
+					};
+				};
+			};
+			buildConfigurationList = 27FAECE72B0E6E1300DF612D /* Build configuration list for PBXProject "Stratus" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 27FAECE32B0E6E1300DF612D;
+			productRefGroup = 27FAECED2B0E6E1300DF612D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				27FAECEB2B0E6E1300DF612D /* Stratus */,
+				27FAECFB2B0E6E1400DF612D /* StratusTests */,
+				27FAED052B0E6E1400DF612D /* StratusUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		27FAECEA2B0E6E1300DF612D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27FAECF72B0E6E1400DF612D /* Preview Assets.xcassets in Resources */,
+				27FAECF42B0E6E1400DF612D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27FAECFA2B0E6E1400DF612D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27FAED042B0E6E1400DF612D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		27FAECE82B0E6E1300DF612D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27FAED202B0E7AA600DF612D /* Strat.swift in Sources */,
+				27FAED1E2B0E6F4D00DF612D /* Template.swift in Sources */,
+				27FAED222B0E7C5200DF612D /* DateTime.swift in Sources */,
+				27FAECF22B0E6E1300DF612D /* Home.swift in Sources */,
+				27FAED292B0F934400DF612D /* Settings.swift in Sources */,
+				27FAED332B104F3600DF612D /* Consts.swift in Sources */,
+				27FAED2D2B0FA1BF00DF612D /* Templates.swift in Sources */,
+				27FAED272B0EB2B800DF612D /* Strata.swift in Sources */,
+				27FAECF02B0E6E1300DF612D /* StratusApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27FAECF82B0E6E1400DF612D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27FAED012B0E6E1400DF612D /* StratusTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27FAED022B0E6E1400DF612D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27FAED0B2B0E6E1400DF612D /* StratusUITests.swift in Sources */,
+				27FAED0D2B0E6E1400DF612D /* StratusUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		27FAECFE2B0E6E1400DF612D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27FAECEB2B0E6E1300DF612D /* Stratus */;
+			targetProxy = 27FAECFD2B0E6E1400DF612D /* PBXContainerItemProxy */;
+		};
+		27FAED082B0E6E1400DF612D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27FAECEB2B0E6E1300DF612D /* Stratus */;
+			targetProxy = 27FAED072B0E6E1400DF612D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		27FAED0E2B0E6E1400DF612D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		27FAED0F2B0E6E1400DF612D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		27FAED112B0E6E1400DF612D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Stratus/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MXS.Stratus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Stratus/Stratus-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		27FAED122B0E6E1400DF612D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Stratus/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MXS.Stratus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Stratus/Stratus-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		27FAED142B0E6E1400DF612D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MXS.StratusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stratus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stratus";
+			};
+			name = Debug;
+		};
+		27FAED152B0E6E1400DF612D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MXS.StratusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stratus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stratus";
+			};
+			name = Release;
+		};
+		27FAED172B0E6E1400DF612D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MXS.StratusUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Stratus;
+			};
+			name = Debug;
+		};
+		27FAED182B0E6E1400DF612D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MXS.StratusUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Stratus;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		27FAECE72B0E6E1300DF612D /* Build configuration list for PBXProject "Stratus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27FAED0E2B0E6E1400DF612D /* Debug */,
+				27FAED0F2B0E6E1400DF612D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27FAED102B0E6E1400DF612D /* Build configuration list for PBXNativeTarget "Stratus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27FAED112B0E6E1400DF612D /* Debug */,
+				27FAED122B0E6E1400DF612D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27FAED132B0E6E1400DF612D /* Build configuration list for PBXNativeTarget "StratusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27FAED142B0E6E1400DF612D /* Debug */,
+				27FAED152B0E6E1400DF612D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27FAED162B0E6E1400DF612D /* Build configuration list for PBXNativeTarget "StratusUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27FAED172B0E6E1400DF612D /* Debug */,
+				27FAED182B0E6E1400DF612D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 27FAECE42B0E6E1300DF612D /* Project object */;
+}
