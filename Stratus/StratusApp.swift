@@ -11,6 +11,7 @@ import SwiftUI
 struct StratusApp: App {
     
     @StateObject var config = Config()
+    @StateObject var strata = Strata()
     
     @State private var selection = 0
     
@@ -40,6 +41,7 @@ struct StratusApp: App {
                 .toolbarBackground(.ultraThinMaterial, for: .tabBar)
             }
             .environmentObject(config)
+            .environmentObject(strata)
         }
     }
 }

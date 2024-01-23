@@ -30,6 +30,7 @@ class DateTime {
             minute:minute
         )
     }
+    
     public static func convertDateToDT(date: Date) -> DateTime {
         let components = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: date)
         return DateTime(
@@ -56,6 +57,11 @@ class DateTime {
         self.hour = hour
         self.minute = minute
     }
+    
+    public func compareToDate(date: Date) -> Int { //Returns difference in minutes
+        return Calendar.current.dateComponents([.minute], from: date, to: self.convertToDate()).minute ?? 0
+    }
+    
     public func getDay() -> Int {
         return self.day
     }

@@ -21,15 +21,10 @@ struct Settings: View {
                     .padding()
             }
             .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
-            .background(.ultraThinMaterial)
+            .background(Color("Header"))
             ScrollView{
                 VStack {
-                    ColorPicker("Background Color", selection:$config.backgroundColor)
-                        .padding(.all, Consts.scrollPadding)
-                        .frame(width:Consts.scrollWidthEditing)
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(Consts.cornerRadius)
-                        .foregroundColor(.black)
+                    
                 }
                 .padding(.top, Consts.scrollVerticalPadding)
             }

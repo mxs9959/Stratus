@@ -10,10 +10,17 @@ import SwiftUI
 struct Home: View {
     
     @EnvironmentObject var config: Config
+    @EnvironmentObject var strata: Strata
     
-    @StateObject private var strata = Strata()
+    @State var editingTask: [[Int]] = []
     
-    @State private var editingTask: [[Int]] = []
+    func detailsToPass(ids: [Int]) -> TaskDetails{
+        if(ids[0]>=0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count){
+            return TaskDetails(details: strata.getStrata()[ids[0]].getTasks()[ids[1]].getDetails())
+        } else {
+            return TaskDetails(details: TaskDetails.getSampleDetails())
+        }
+    }
     
     var body: some View {
         NavigationStack(path:$editingTask) {
@@ -27,14 +34,9 @@ struct Home: View {
                         .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                         .bold()
                         .padding()
-                    Button(action:strata.addSampleStrat) {
-                        Image(systemName:"plus")
-                            .foregroundStyle(Color.accentColor)
-                            .imageScale(.large)
-                    }
                 }
                 .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
-                .background(.ultraThinMaterial)
+                .background(Color("Header"))
                 
                 //BODY
                 if(strata.getStrata().count > 0){
@@ -42,35 +44,36 @@ struct Home: View {
                     ScrollView {
                         VStack {
                             ForEach(0..<strata.getStrata().count, id:\.self){ i in
-                                StratView(strata:strata, id: i)
+                                StratView(strata:strata, id:i)
                             }
                         }
                         .padding(.vertical, Consts.scrollVerticalPadding)
                     }
                 } else {
-                    //If no strats
-                    Text("You have no strats.\n\nTap the plus to create a strat.")
+                    //If no tasks
+                    Spacer()
+                    Text("You have no strats.\n\nTap the plus to create a new task.")
                         .multilineTextAlignment(.center)
-                        .frame(maxHeight:.infinity)
+                    NavigationLink(value:[-1,-1]){
+                        Image(systemName:"plus")
+                            .padding(Consts.scrollVerticalPadding)
+                    }
+                    Spacer()
                 }
             }
+            .frame(width:UIScreen.main.bounds.width)
             .background(Color("BodyBackground"))
             .navigationDestination(for: [Int].self){ids in
+                
                 EditTask(
                     strata:strata,
-                    details: TaskDetails(details:
-                                            
-                        (ids[1] == strata.getStrata()[ids[0]].getTasks().count) ? TaskDetails.getSampleDetails() : strata.getStrata()[ids[0]].getTasks()[ids[1]].getDetails()
-                                         
-                                        ),
-                    
+                    details: detailsToPass(ids: ids),
                     editingTask: $editingTask,
                     stratId: ids[0],
                     taskId: ids[1],
-                    newTask: ids[1] == strata.getStrata()[ids[0]].getTasks().count
+                    newTask: !(ids[0]>=0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
                 )
                 .navigationBarBackButtonHidden(true)
-                .navigationTitle("")
             }
         }
     }
@@ -84,24 +87,24 @@ struct StratView: View {
     
     var body: some View {
         
-        NavigationLink(value:[id, strata.getStrata()[id].getTasks().count]) {
-            
-            VStack {
-                Text(strata.getStrata()[id].getDisplayRange())
-                    .font(.subheadline)
-                    .padding(.top, Consts.scrollPadding)
-                VStack(spacing:0) {
-                    ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
-                        TaskView(strata:strata, id: i, stratId: id)
-                    }
+        VStack {
+            Text(strata.getStrata()[id].getDisplayRange())
+                .font(.subheadline)
+                .padding(.top, Consts.scrollPadding)
+            VStack(spacing:0) {
+                ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
+                    TaskView(strata:strata, id: i, stratId: id)
                 }
-                .cornerRadius(Consts.cornerRadius)
-                .padding(.bottom,Consts.scrollPadding)
             }
-            .padding(.all, Consts.scrollPadding)
-            .background(.ultraThinMaterial)
             .cornerRadius(Consts.cornerRadius)
+            .padding(.bottom,Consts.scrollPadding)
+            NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
+                Image(systemName:"plus")
+            }
         }
+        .padding(.all, Consts.scrollPadding)
+        .background(Color("Header"))
+        .cornerRadius(Consts.cornerRadius)
     }
 }
 
@@ -140,18 +143,25 @@ struct EditTask: View {
     @StateObject var details: TaskDetails
     @Binding var editingTask: [[Int]]
     
-    var stratId: Int
+    @State var stratId: Int
     var taskId: Int
     var newTask: Bool
     
     func edit(){
         editingTask = []
-        strata.manualUpdate()
         if(newTask){
+            if(stratId<0){
+                stratId = 0 //strata.findStrat(begin:details.begin)
+            }
+            if(strata.getStrata().count == 0){
+                strata.addSampleStrat()
+            }
             strata.addTasksToStrat(id: stratId, tasks: [Task(priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, begin: DateTime.convertDateToDT(date: details.begin), color: details.color, title: details.title)])
         } else {
             strata.replaceTaskInStrat(stratId: stratId, taskId:taskId, task: Task(priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, begin: DateTime.convertDateToDT(date: details.begin), color: details.color, title: details.title))
         }
+        strata.getStrata()[stratId].updateRange()
+        strata.manualUpdate()
     }
     
     var body: some View {
@@ -162,11 +172,11 @@ struct EditTask: View {
                     .bold()
                     .padding()
                     .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
-                    .background(.ultraThinMaterial)
+                    .background(Color("Header"))
                 ScrollView {
                     TextField("Name", text:$details.title)
                         .padding(.all, Consts.scrollPadding)
-                        .background(.ultraThinMaterial)
+                        .background(Color("Header"))
                         .cornerRadius(Consts.cornerRadiusField)
                     ColorPicker("Task Color", selection:$details.color)
                         .padding(.all, Consts.scrollPadding)
@@ -177,7 +187,7 @@ struct EditTask: View {
                         TextField("", text:$details.duration)
                             .foregroundColor(.black)
                             .padding(.all, Consts.scrollPadding)
-                            .background(.ultraThinMaterial)
+                            .background(Color("Header"))
                             .cornerRadius(Consts.cornerRadiusField)
                     }
                     .padding(.all, Consts.scrollPadding)
@@ -206,5 +216,5 @@ struct EditTask: View {
 }
 
 #Preview {
-    Home().environmentObject(Config())
+    Home().environmentObject(Config()).environmentObject(Strata())
 }

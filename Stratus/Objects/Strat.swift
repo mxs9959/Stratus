@@ -17,7 +17,33 @@ class Strat: ObservableObject {
     init() {
         self.begin = DateTime.getNow(rounded: true)
         self.end = DateTime.getNow(rounded: true).addMinutes(minutes: 60)
-        self.tasks = [Task(begin:DateTime.getNow(rounded: true))]
+        self.tasks = []
+    }
+    
+    public func organize(){
+        let ref = self.tasks[0]
+        var output: [Task] = [self.tasks[0]]
+        for i in 1..<self.tasks.count {
+            var j = 0
+            while(self.tasks[i].getBegin().compareToDate(date: ref.getBegin().convertToDate())-output[j].getBegin().compareToDate(date: ref.getBegin().convertToDate()))>0{
+                j += 1
+                if(j==output.count){
+                    break
+                }
+            }
+            if(j==output.count){
+                output.append(self.tasks[i])
+            } else {
+                output.insert(self.tasks[i], at:j)
+            }
+        }
+        self.tasks = output
+    }
+    
+    public func updateRange(){
+        self.organize()
+        self.begin = self.tasks[0].getBegin()
+        self.end = self.tasks[self.tasks.count-1].getBegin().addMinutes(minutes: self.tasks[self.tasks.count-1].getDuration())
     }
     
     public func getDisplayRange() -> String {
@@ -42,5 +68,8 @@ class Strat: ObservableObject {
     }
     public func getTasks() -> [Task]{
         return self.tasks
+    }
+    public func removeTask(id: Int){
+        self.tasks.remove(at:id)
     }
 }

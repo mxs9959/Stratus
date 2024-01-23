@@ -35,6 +35,14 @@ class Strata: ObservableObject {
     public func replaceTaskInStrat(stratId: Int, taskId: Int, task: Task){
         strata[stratId].replaceTask(task:task, id:taskId)
     }
+    
+    public func findStrat(begin: Date) -> Int{
+        /*
+        for strat in strata {
+            
+        }*/
+        return 0
+    }
 }
 
 class Templates: ObservableObject {

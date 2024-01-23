@@ -9,11 +9,12 @@ import SwiftUI
 
 struct TemplatesView: View {
     
+    @EnvironmentObject var strata: Strata
     @EnvironmentObject var config: Config
     
     @StateObject var templates: Templates = Templates()
     
-    @State var editingTemplate: [Int] = []
+    @State var editingTemplate: [[Int]] = []
     
     var body: some View {
         NavigationStack(path:$editingTemplate) {
@@ -32,23 +33,21 @@ struct TemplatesView: View {
                     }
                 }
                 .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
-                .background(.ultraThinMaterial)
+                .background(Color("Header"))
                 
                 //BODY
                 if(templates.getTemplates().count > 0){
                     List(0..<templates.getTemplates().count, id:\.self){id in
-                        TemplateView(templates:templates, id:id)
-                            .listRowBackground(templates.getTemplates()[id].getColor())
-                            .swipeActions {
-                                Button("Delete"){
-                                    templates.removeTemplate(id: id)
-                                }
-                                .tint(.red)
-                                Button("Edit"){
-                                    editingTemplate = [id]
-                                }
-                                .tint(.yellow)
-                            }
+                            TemplateView(templates:templates, editingTemplate: $editingTemplate, id:id)
+                                .listRowBackground(templates.getTemplates()[id].getColor())
+                                .swipeActions(allowsFullSwipe: false) {
+                                    Button(role:.destructive){
+                                        templates.removeTemplate(id: id)
+                                    } label: {Label("Delete", systemImage:"trash.fill")}
+                                    Button {
+                                        editingTemplate = [[id, -1]]
+                                    } label: {Label("Edit", systemImage:"pencil")}
+                        }
                     }
                 } else {
                     Text("You have no templates.\n\nTap the plus to create a template.")
@@ -58,8 +57,12 @@ struct TemplatesView: View {
             }
             .background(Color("BodyBackground"))
             .frame(width:UIScreen.main.bounds.width)
-            .navigationDestination(for: Int.self){id in
-                EditTemplate(templates: templates, details: TemplateDetails(details: templates.getTemplates()[id].getTemplateDetails()), editingTemplate: $editingTemplate, id: id)
+            .navigationDestination(for: [Int].self){id in
+                if(id[0]>=0){
+                    EditTemplate(templates: templates, details: TemplateDetails(details: templates.getTemplates()[id[0]].getTemplateDetails()), editingTemplate: $editingTemplate, id: id[0])
+                } else {
+                    EditTask(strata: strata, details: TaskDetails(details: templates.getTemplates()[id[1]].getTemplateDetails()), editingTask: $editingTemplate, stratId: -1, taskId: -1, newTask: true)
+                }
             }
         }
     }
@@ -69,6 +72,8 @@ struct TemplateView: View {
     
     @ObservedObject var templates: Templates
     
+    @Binding var editingTemplate: [[Int]]
+    
     var id: Int
     
     func getThisTemplate() -> Template{
@@ -76,6 +81,7 @@ struct TemplateView: View {
     }
     
     var body: some View {
+        NavigationLink(value:[-1,id]){
             HStack {
                 Text(getThisTemplate().getName())
                     .foregroundColor(.black)
@@ -92,6 +98,7 @@ struct TemplateView: View {
                     .padding(.trailing, Consts.scrollPadding)
             }
         }
+    }
 }
 
 struct EditTemplate: View {
@@ -102,7 +109,7 @@ struct EditTemplate: View {
     
     @StateObject var details: TemplateDetails
     
-    @Binding var editingTemplate: [Int]
+    @Binding var editingTemplate: [[Int]]
     
     var id: Int
     
@@ -114,44 +121,47 @@ struct EditTemplate: View {
     
     var body: some View {
         VStack {
-            Text("\((id<0) ? "Add" : "Edit") Template")
-                .font(.title)
-                .bold()
-                .padding()
-            ScrollView {
-                TextField("Name", text:$details.name)
-                    .padding(.all, Consts.scrollPadding)
-                    .foregroundColor(.gray)
-                HStack {
-                    Text("Duration (minutes):")
-                    TextField("", text:$details.duration)
+            VStack {
+                Text("\((id<0) ? "Add" : "Edit") Template")
+                    .font(.title)
+                    .bold()
+                    .padding()
+                ScrollView {
+                    TextField("Name", text:$details.name)
+                        .padding(.all, Consts.scrollPadding)
                         .foregroundColor(.gray)
-                }
-                .padding(.all, Consts.scrollPadding)
-                HStack {
-                    Text("Priority")
-                    Slider(value: $details.priority, in: 0...10)
-                        .padding(.horizontal, Consts.scrollPadding)
-                    Text("\(Int(details.priority))")
-                }
-                .padding(.all, Consts.scrollPadding)
-                Toggle("Mandatory", isOn:$details.mandatory)
+                    HStack {
+                        Text("Duration (minutes):")
+                        TextField("", text:$details.duration)
+                            .foregroundColor(.gray)
+                    }
                     .padding(.all, Consts.scrollPadding)
-                ColorPicker("Template Color", selection:$details.color)
+                    HStack {
+                        Text("Priority")
+                        Slider(value: $details.priority, in: 0...10)
+                            .padding(.horizontal, Consts.scrollPadding)
+                        Text("\(Int(details.priority))")
+                    }
                     .padding(.all, Consts.scrollPadding)
+                    Toggle("Mandatory", isOn:$details.mandatory)
+                        .padding(.all, Consts.scrollPadding)
+                    ColorPicker("Template Color", selection:$details.color)
+                        .padding(.all, Consts.scrollPadding)
+                }
+                .frame(maxHeight:.infinity)
+                Button(action:edit){
+                    Label("Done", systemImage:"checkmark")
+                }
+                .padding()
             }
-            .frame(maxHeight:.infinity)
-            Button(action:edit){
-                Label("Done", systemImage:"checkmark")
-            }
-            .padding()
+            .frame(width:Consts.scrollWidthEditing)
         }
-        .frame(width:Consts.scrollWidthEditing)
+        .frame(width:UIScreen.main.bounds.width)
         .background(Color("BodyBackground"))
     }
     
 }
 
 #Preview {
-    TemplatesView().environmentObject(Config())
+    TemplatesView().environmentObject(Config()).environmentObject(Strata())
 }

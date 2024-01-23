@@ -133,6 +133,12 @@ class TaskDetails: TemplateDetails {
         super.init(details:("custom", details.1, details.2, details.3, details.4))
     }
     
+    override init(details: (String, Int, Bool, Int, Color)){
+        self.title = details.0
+        self.begin = DateTime.getNow(rounded:false).convertToDate()
+        super.init(details:("custom", details.1, details.2, details.3, details.4))
+    }
+    
     public static func getSampleDetails() -> (String, Int, Bool, Int, Color, DateTime){
         return ("Sample task", 5, false, 60, Consts.defaultTaskColor, DateTime.getNow(rounded: true))
     }
