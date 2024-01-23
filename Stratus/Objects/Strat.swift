@@ -50,10 +50,10 @@ class Strat: ObservableObject {
     }
     
     public func getDisplayRange() -> String {
-        if(self.begin.getFormattedDate() != self.end.getFormattedDate()){
-            return self.begin.getFormattedDate() + " " + self.begin.getFormattedTime() + " to " + self.end.getFormattedDate() + " " + self.end.getFormattedTime()
+        if(self.begin.getFormattedDate(weekday:false) != self.end.getFormattedDate(weekday: false)){
+            return self.begin.getFormattedDate(weekday:false) + " " + self.begin.getFormattedTime() + " to " + self.end.getFormattedDate(weekday:false) + " " + self.end.getFormattedTime()
         } else {
-            return self.begin.getFormattedDate() + ", " + self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
+            return self.begin.getFormattedDate(weekday:false) + ", " + self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
         }
     }
     
@@ -74,6 +74,14 @@ class Strat: ObservableObject {
     }
     public func removeTask(id: Int){
         self.tasks.remove(at:id)
+    }
+    public func getBegin() -> DateTime {
+        self.updateRange()
+        return self.begin
+    }
+    public func getEnd() -> DateTime {
+        self.updateRange()
+        return self.begin
     }
     
 }

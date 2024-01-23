@@ -38,12 +38,15 @@ class Strata: ObservableObject {
     }
     
     public func findStrat(begin: Date) -> Int{
-        /*
-        for strat in strata {
-            
-        }*/
-        return 0
+        for i in 0..<self.strata.count {
+            if(!self.strata[i].sleep && (self.strata[i].getBegin().compareToDate(date: begin)>0 && self.strata[i].getEnd().compareToDate(date: begin)<0)){
+                return i
+            }
+        }
+        self.addSampleStrat()
+        return self.strata.count - 1
     }
+    
 }
 
 class Templates: ObservableObject {

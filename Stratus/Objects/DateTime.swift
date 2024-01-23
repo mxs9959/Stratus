@@ -7,9 +7,9 @@
 
 import Foundation
 
-class DateTime {
-    private var day: Int
-    private var month: Int
+class DateTime: ObservableObject {
+    @Published private var day: Int
+    @Published private var month: Int
     private var year: Int
     private var hour: Int
     private var minute: Int
@@ -108,7 +108,31 @@ class DateTime {
         }
         return result
     }
-    public func getFormattedDate() -> String {
-        return String(self.month) + "/" + String(self.day)
+    public func getFormattedDate(weekday: Bool) -> String {
+        return (weekday ? self.getWeekday() + ", ":"") + String(self.month) + "/" + String(self.day)
+    }
+    
+    public func addDaysToThis(days: Int) {
+        let result = Calendar(identifier:.gregorian).date(from: DateComponents(year:self.year, month:self.month, day:self.day, hour:self.hour, minute:self.minute))!.addingTimeInterval(86400*Double(days))
+        let components = Calendar.current.dateComponents([.day,.month,.year,.hour,.minute], from: result)
+        self.day = components.day ?? self.day
+        self.month = components.month ?? self.month
+        self.year = components.year ?? self.year
+        self.hour = components.hour ?? self.hour
+        self.minute = components.minute ?? self.minute
+        objectWillChange.send()
+    }
+    
+    public func getWeekday() -> String{
+        switch(Calendar.current.dateComponents([.weekday], from:self.convertToDate()).weekday){
+        case 1: return "Sunday"
+        case 2: return "Monday"
+        case 3: return "Tuesday"
+        case 4: return "Wednesday"
+        case 5: return "Thursday"
+        case 6: return "Friday"
+        case 7: return "Saturday"
+        default: return ""
+        }
     }
 }

@@ -14,6 +14,8 @@ struct Home: View {
     
     @State var editingTask: [[Int]] = []
     
+    @StateObject var showingDate: DateTime = DateTime.getNow(rounded: false)
+    
     func detailsToPass(ids: [Int]) -> TaskDetails{
         if(ids[0]>=0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count){
             return TaskDetails(details: strata.getStrata()[ids[0]].getTasks()[ids[1]].getDetails())
@@ -34,12 +36,32 @@ struct Home: View {
                         .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                         .bold()
                         .padding()
+                    NavigationLink(value:[-1,-1]){
+                    }
                 }
                 .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
                 .background(Color("Header"))
                 
                 //BODY
-                if(strata.getStrata().count > 1){
+                HStack {
+                    Button(action:{showingDate.addDaysToThis(days: -1)}){
+                        Image(systemName:"arrow.left.circle.fill")
+                            .imageScale(.large)
+                            .padding()
+                    }
+                    Spacer()
+                    Text("\(showingDate.getFormattedDate(weekday:true))")
+                        .padding(.all, Consts.scrollVerticalPadding)
+                    Spacer()
+                    Button(action:{showingDate.addDaysToThis(days: 1)}){
+                        Image(systemName:"arrow.right.circle.fill")
+                            .imageScale(.large)
+                            .padding()
+                    }
+                }
+                //.background(Color("Header2"))
+                
+                if(strata.getStrata().count > 0){
                     //Listing strats
                     ScrollView {
                         VStack {
@@ -54,14 +76,13 @@ struct Home: View {
                     Spacer()
                     Text("You have no strats.\n\nTap the plus to create a new task.")
                         .multilineTextAlignment(.center)
-                    NavigationLink(value:[-1,-1]){
-                        Image(systemName:"plus")
-                            .padding(Consts.scrollVerticalPadding)
-                    }
                     Spacer()
-                    StratView(strata:strata, id:0)
-                        .padding()
                 }
+                Spacer()
+                NavigationLink(value:[-1,-1]){
+                    Text(Image(systemName:"plus")) + Text(" Add Task")
+                }
+                    .padding()
             }
             .frame(width:UIScreen.main.bounds.width)
             .background(Color("BodyBackground"))
@@ -101,6 +122,7 @@ struct StratView: View {
                 Text("\(strata.getStrata()[id].getDisplayRange())")
                     .font(.subheadline)
             }
+            .padding(.all, Consts.scrollPadding)
         } else {
             
             VStack {
@@ -168,7 +190,7 @@ struct EditTask: View {
         editingTask = []
         if(newTask){
             if(stratId<0){
-                stratId = 0 //strata.findStrat(begin:details.begin)
+                stratId = strata.findStrat(begin:details.begin)
             }
             if(strata.getStrata().count == 0){
                 strata.addSampleStrat()
@@ -177,7 +199,6 @@ struct EditTask: View {
         } else {
             strata.replaceTaskInStrat(stratId: stratId, taskId:taskId, task: Task(priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, begin: DateTime.convertDateToDT(date: details.begin), color: details.color, title: details.title))
         }
-        strata.getStrata()[stratId].updateRange()
         strata.manualUpdate()
     }
     
