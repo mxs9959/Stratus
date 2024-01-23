@@ -39,7 +39,7 @@ struct Home: View {
                 .background(Color("Header"))
                 
                 //BODY
-                if(strata.getStrata().count > 0){
+                if(strata.getStrata().count > 1){
                     //Listing strats
                     ScrollView {
                         VStack {
@@ -59,6 +59,8 @@ struct Home: View {
                             .padding(Consts.scrollVerticalPadding)
                     }
                     Spacer()
+                    StratView(strata:strata, id:0)
+                        .padding()
                 }
             }
             .frame(width:UIScreen.main.bounds.width)
@@ -87,24 +89,39 @@ struct StratView: View {
     
     var body: some View {
         
-        VStack {
-            Text(strata.getStrata()[id].getDisplayRange())
-                .font(.subheadline)
-                .padding(.top, Consts.scrollPadding)
-            VStack(spacing:0) {
-                ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
-                    TaskView(strata:strata, id: i, stratId: id)
+        if strata.getStrata()[id].sleep {
+            VStack {
+                HStack {
+                    Image(systemName:"moon.stars.fill")
+                        .foregroundStyle(.purple)
+                    Text("Sleep").bold()
+                        .font(.title3)
+                    
+                }
+                Text("\(strata.getStrata()[id].getDisplayRange())")
+                    .font(.subheadline)
+            }
+        } else {
+            
+            VStack {
+                Text(strata.getStrata()[id].getDisplayRange())
+                    .font(.subheadline)
+                    .padding(.top, Consts.scrollPadding)
+                VStack(spacing:0) {
+                    ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
+                        TaskView(strata:strata, id: i, stratId: id)
+                    }
+                }
+                .cornerRadius(Consts.cornerRadius)
+                .padding(.bottom,Consts.scrollPadding)
+                NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
+                    Image(systemName:"plus")
                 }
             }
+            .padding(.all, Consts.scrollPadding)
+            .background(Color("Header"))
             .cornerRadius(Consts.cornerRadius)
-            .padding(.bottom,Consts.scrollPadding)
-            NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
-                Image(systemName:"plus")
-            }
         }
-        .padding(.all, Consts.scrollPadding)
-        .background(Color("Header"))
-        .cornerRadius(Consts.cornerRadius)
     }
 }
 

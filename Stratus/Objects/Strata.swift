@@ -13,7 +13,8 @@ class Strata: ObservableObject {
     @Published private var strata: [Strat]
     
     init(){
-        self.strata = []
+        self.strata = [Strat()]
+        self.strata[0].sleep = true
     }
     
     public func manualUpdate(){

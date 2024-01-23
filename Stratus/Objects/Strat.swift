@@ -14,10 +14,13 @@ class Strat: ObservableObject {
     @Published private var end: DateTime
     @Published private var tasks: [Task]
     
+    public var sleep: Bool
+    
     init() {
         self.begin = DateTime.getNow(rounded: true)
         self.end = DateTime.getNow(rounded: true).addMinutes(minutes: 60)
         self.tasks = []
+        self.sleep = false
     }
     
     public func organize(){
@@ -72,4 +75,5 @@ class Strat: ObservableObject {
     public func removeTask(id: Int){
         self.tasks.remove(at:id)
     }
+    
 }
