@@ -31,14 +31,14 @@ struct StratusApp: App {
                             Label("Home", systemImage:"house")
                         }
                         .tag(0)
-                    Settings()
+                    Scheduling()
                         .tabItem {
                             Label("Settings", systemImage:"gear")
                         }
                         .tag(2)
                 }
                 .toolbarBackground(.visible, for: .tabBar)
-                .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+                .toolbarBackground(Color("Header"), for: .tabBar)
             }
             .environmentObject(config)
             .environmentObject(strata)

@@ -66,7 +66,9 @@ struct Home: View {
                     ScrollView {
                         VStack {
                             ForEach(0..<strata.getStrata().count, id:\.self){ i in
-                                StratView(strata:strata, id:i)
+                                if(strata.getStrata()[i].getBegin()).equals(dateTime: showingDate, onlyDate: true){
+                                    StratView(strata:strata, id:i)
+                                }
                             }
                         }
                         .padding(.vertical, Consts.scrollVerticalPadding)
@@ -192,13 +194,12 @@ struct EditTask: View {
             if(stratId<0){
                 stratId = strata.findStrat(begin:details.begin)
             }
-            if(strata.getStrata().count == 0){
-                strata.addSampleStrat()
-            }
             strata.addTasksToStrat(id: stratId, tasks: [Task(priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, begin: DateTime.convertDateToDT(date: details.begin), color: details.color, title: details.title)])
         } else {
             strata.replaceTaskInStrat(stratId: stratId, taskId:taskId, task: Task(priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, begin: DateTime.convertDateToDT(date: details.begin), color: details.color, title: details.title))
         }
+        strata.getStrata()[stratId].updateRange()
+        strata.organize()
         strata.manualUpdate()
     }
     

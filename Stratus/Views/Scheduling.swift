@@ -8,28 +8,27 @@
 import Foundation
 import SwiftUI
 
-struct Settings: View {
+struct Scheduling: View {
     
+    @EnvironmentObject var strata: Strata
     @EnvironmentObject var config: Config
     
     var body: some View {
         VStack(spacing:0) {
             HStack {
-                Text("Settings")
+                Text("Scheduling")
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .bold()
                     .padding()
             }
             .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
             .background(Color("Header"))
-            ScrollView{
-                VStack {
-                    
-                }
-                .padding(.top, Consts.scrollVerticalPadding)
+            Form {
+                
             }
-            Text("Stratus by Max Scholle, 2024")
-                .padding(.vertical, Consts.scrollVerticalPadding)
+            .background(Color("BodyBackground"))
+            .frame(width: Consts.scrollWidthEditing)
+            .padding(.top, Consts.scrollVerticalPadding)
         }
         .frame(width:UIScreen.main.bounds.width)
         .background(Color("BodyBackground"))
@@ -37,5 +36,5 @@ struct Settings: View {
 }
 
 #Preview {
-    Settings().environmentObject(Config())
+    Scheduling().environmentObject(Config()).environmentObject(Strata())
 }

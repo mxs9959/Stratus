@@ -135,4 +135,16 @@ class DateTime: ObservableObject {
         default: return ""
         }
     }
+    
+    public func midnight() -> DateTime {
+        return DateTime(day: self.day, month: self.month, year: self.year, hour: 0, minute: 0)
+    }
+    
+    public func equals(dateTime: DateTime, onlyDate: Bool) -> Bool {
+        if(!onlyDate){
+            return self.convertToDate() == dateTime.convertToDate()
+        } else {
+            return self.midnight().convertToDate() == dateTime.midnight().convertToDate()
+        }
+    }
 }

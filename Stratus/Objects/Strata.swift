@@ -11,10 +11,13 @@ import SwiftUI
 class Strata: ObservableObject {
     
     @Published private var strata: [Strat]
+    @Published private var sleepTime: Int //Sleep time in minutes
+    @Published private var stratLoadingScope: (DateTime, DateTime)
     
     init(){
-        self.strata = [Strat()]
-        self.strata[0].sleep = true
+        self.strata = []
+        self.sleepTime = 480
+        self.stratLoadingScope = (DateTime.getNow(rounded: true).addMinutes(minutes: -1440).midnight(), DateTime.getNow(rounded: true).addMinutes(minutes: 8640).midnight()) //Default range for populating strata is one day behind through five days ahead
     }
     
     public func manualUpdate(){
@@ -39,13 +42,45 @@ class Strata: ObservableObject {
     
     public func findStrat(begin: Date) -> Int{
         for i in 0..<self.strata.count {
-            if(!self.strata[i].sleep && (self.strata[i].getBegin().compareToDate(date: begin)>0 && self.strata[i].getEnd().compareToDate(date: begin)<0)){
+            if(!self.strata[i].sleep && (self.strata[i].getBegin().compareToDate(date: begin)<=0 && self.strata[i].getEnd().compareToDate(date: begin)>=0)){
                 return i
             }
         }
         self.addSampleStrat()
         return self.strata.count - 1
     }
+    
+    public func organize(){
+        var output: [Strat] = [self.strata[0]]
+        for i in 1..<self.strata.count {
+            var j = 0
+            while self.strata[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
+                j += 1
+                if(j==output.count){
+                    break
+                }
+            }
+            if(j==output.count){
+                output.append(self.strata[i])
+            } else {
+                output.insert(self.strata[i], at:j)
+            }
+        }
+        self.strata = output
+    }
+    
+    public func getSleepHours() -> Int{
+        return self.sleepTime/60
+    }
+    
+    public func getSleepMinutes() -> Int{
+        return self.sleepTime%60
+    }
+    
+    public func setSleepTime(minutes: Int, hours: Int){
+        self.sleepTime = hours*60 + minutes
+    }
+    
     
 }
 

@@ -24,11 +24,10 @@ class Strat: ObservableObject {
     }
     
     public func organize(){
-        let ref = self.tasks[0]
         var output: [Task] = [self.tasks[0]]
         for i in 1..<self.tasks.count {
             var j = 0
-            while(self.tasks[i].getBegin().compareToDate(date: ref.getBegin().convertToDate())-output[j].getBegin().compareToDate(date: ref.getBegin().convertToDate()))>0{
+            while self.tasks[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
                 j += 1
                 if(j==output.count){
                     break
@@ -44,13 +43,15 @@ class Strat: ObservableObject {
     }
     
     public func updateRange(){
-        self.organize()
-        self.begin = self.tasks[0].getBegin()
-        self.end = self.tasks[self.tasks.count-1].getBegin().addMinutes(minutes: self.tasks[self.tasks.count-1].getDuration())
+        if(!self.sleep){
+            self.organize()
+            self.begin = self.tasks[0].getBegin()
+            self.end = self.tasks[self.tasks.count-1].getBegin().addMinutes(minutes: self.tasks[self.tasks.count-1].getDuration())
+        }
     }
     
     public func getDisplayRange() -> String {
-        if(self.begin.getFormattedDate(weekday:false) != self.end.getFormattedDate(weekday: false)){
+        if(self.begin.equals(dateTime: self.end, onlyDate:true)){
             return self.begin.getFormattedDate(weekday:false) + " " + self.begin.getFormattedTime() + " to " + self.end.getFormattedDate(weekday:false) + " " + self.end.getFormattedTime()
         } else {
             return self.begin.getFormattedDate(weekday:false) + ", " + self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
@@ -81,7 +82,7 @@ class Strat: ObservableObject {
     }
     public func getEnd() -> DateTime {
         self.updateRange()
-        return self.begin
+        return self.end
     }
     
 }

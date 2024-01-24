@@ -18,7 +18,7 @@
 		27FAED202B0E7AA600DF612D /* Strat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED1F2B0E7AA600DF612D /* Strat.swift */; };
 		27FAED222B0E7C5200DF612D /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED212B0E7C5100DF612D /* DateTime.swift */; };
 		27FAED272B0EB2B800DF612D /* Strata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED262B0EB2B800DF612D /* Strata.swift */; };
-		27FAED292B0F934400DF612D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED282B0F934400DF612D /* Settings.swift */; };
+		27FAED292B0F934400DF612D /* Scheduling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED282B0F934400DF612D /* Scheduling.swift */; };
 		27FAED2D2B0FA1BF00DF612D /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED2C2B0FA1BF00DF612D /* Templates.swift */; };
 		27FAED332B104F3600DF612D /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAED322B104F3600DF612D /* Consts.swift */; };
 /* End PBXBuildFile section */
@@ -56,7 +56,7 @@
 		27FAED212B0E7C5100DF612D /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		27FAED252B0E84BA00DF612D /* Stratus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stratus-Bridging-Header.h"; sourceTree = "<group>"; };
 		27FAED262B0EB2B800DF612D /* Strata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strata.swift; sourceTree = "<group>"; };
-		27FAED282B0F934400DF612D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		27FAED282B0F934400DF612D /* Scheduling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduling.swift; sourceTree = "<group>"; };
 		27FAED2C2B0FA1BF00DF612D /* Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
 		27FAED322B104F3600DF612D /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,7 +149,7 @@
 			children = (
 				27FAECF12B0E6E1300DF612D /* Home.swift */,
 				27FAED2C2B0FA1BF00DF612D /* Templates.swift */,
-				27FAED282B0F934400DF612D /* Settings.swift */,
+				27FAED282B0F934400DF612D /* Scheduling.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -301,7 +301,7 @@
 				27FAED1E2B0E6F4D00DF612D /* Template.swift in Sources */,
 				27FAED222B0E7C5200DF612D /* DateTime.swift in Sources */,
 				27FAECF22B0E6E1300DF612D /* Home.swift in Sources */,
-				27FAED292B0F934400DF612D /* Settings.swift in Sources */,
+				27FAED292B0F934400DF612D /* Scheduling.swift in Sources */,
 				27FAED332B104F3600DF612D /* Consts.swift in Sources */,
 				27FAED2D2B0FA1BF00DF612D /* Templates.swift in Sources */,
 				27FAED272B0EB2B800DF612D /* Strata.swift in Sources */,
