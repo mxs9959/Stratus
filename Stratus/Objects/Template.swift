@@ -140,7 +140,7 @@ class TaskDetails: TemplateDetails {
     }
     
     public static func getSampleDetails() -> (String, Int, Bool, Int, Color, DateTime){
-        return ("Sample task", 5, false, 60, Consts.defaultTaskColor, DateTime.getNow(rounded: true))
+        return ("Sample task", 5, false, 60, Consts.randomColor(), DateTime.getNow(rounded: true))
     }
     
 }

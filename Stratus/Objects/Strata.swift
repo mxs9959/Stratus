@@ -10,7 +10,11 @@ import SwiftUI
 
 class Strata: ObservableObject {
     
-    @Published private var strata: [Strat]
+    @Published private var strata: [Strat] {
+        willSet{
+            objectWillChange.send()
+        }
+    }
     @Published private var sleepTime: Int //Sleep time in minutes
     @Published private var stratLoadingScope: (DateTime, DateTime)
     
@@ -18,10 +22,7 @@ class Strata: ObservableObject {
         self.strata = []
         self.sleepTime = 480
         self.stratLoadingScope = (DateTime.getNow(rounded: true).addMinutes(minutes: -1440).midnight(), DateTime.getNow(rounded: true).addMinutes(minutes: 8640).midnight()) //Default range for populating strata is one day behind through five days ahead
-    }
-    
-    public func manualUpdate(){
-        objectWillChange.send()
+     
     }
     
     public func addSampleStrat(){
@@ -66,6 +67,12 @@ class Strata: ObservableObject {
                 output.insert(self.strata[i], at:j)
             }
         }
+        for i in 1..<output.count {
+            if(output[i-1].getEnd().compareToDate(date: output[i].getBegin().convertToDate())>=0){
+                output[i-1].addTasks(tasks: output[i].getTasks())
+                output.remove(at:i)
+            }
+        }
         self.strata = output
     }
     
@@ -81,6 +88,14 @@ class Strata: ObservableObject {
         self.sleepTime = hours*60 + minutes
     }
     
+    public func stratsOnDay(day: DateTime) -> Bool{
+        for strat in self.strata {
+            if strat.getBegin().equals(dateTime: day, onlyDate: true){
+                return true
+            }
+        }
+        return false
+    }
     
 }
 

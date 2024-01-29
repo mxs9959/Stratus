@@ -51,7 +51,7 @@ class Strat: ObservableObject {
     }
     
     public func getDisplayRange() -> String {
-        if(self.begin.equals(dateTime: self.end, onlyDate:true)){
+        if(!self.begin.equals(dateTime: self.end, onlyDate:true)){
             return self.begin.getFormattedDate(weekday:false) + " " + self.begin.getFormattedTime() + " to " + self.end.getFormattedDate(weekday:false) + " " + self.end.getFormattedTime()
         } else {
             return self.begin.getFormattedDate(weekday:false) + ", " + self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()

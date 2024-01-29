@@ -24,8 +24,14 @@ struct Consts {
     static var scrollWidthTemplates: CGFloat = UIScreen.main.bounds.width - 2*20
     
     static var defaultTaskColor: Color = Color(red:198/255, green:132/255, blue:88/255)
+    static var LB: Double = 100
     static func randomColor() -> Color {
-        return Color(red:Double.random(in:100..<255)/255,green:Double.random(in:100..<255)/255,blue:Double.random(in:100..<255)/255)
+        return Color(red:Double.random(in:LB..<255)/255,green:Double.random(in:LB..<255)/255,blue:Double.random(in:LB..<255)/255)
+    }
+    
+    static var funEmojis = ["😀", "😆", "😃", "😌", "😇", "😂", "😜", "🤨", "🧐", "😎", "😋", "🥳", "🤥", "🤯", "🫨", "🤑", "🤠", "👌", "💪", "👍", "👏"]
+    static func randomEmoji() -> String {
+        return funEmojis[Int.random(in:0..<funEmojis.count)]
     }
     
 }

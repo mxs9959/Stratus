@@ -61,7 +61,7 @@ struct Home: View {
                 }
                 //.background(Color("Header2"))
                 
-                if(strata.getStrata().count > 0){
+                if(strata.stratsOnDay(day: showingDate)){
                     //Listing strats
                     ScrollView {
                         VStack {
@@ -76,15 +76,18 @@ struct Home: View {
                 } else {
                     //If no tasks
                     Spacer()
-                    Text("You have no strats.\n\nTap the plus to create a new task.")
+                    Text("You have no strats on this day.")
                         .multilineTextAlignment(.center)
-                    Spacer()
+                        .padding()
+                    Text(Consts.randomEmoji())
+                        .font(.title)
+                        .padding()
                 }
                 Spacer()
                 NavigationLink(value:[-1,-1]){
                     Text(Image(systemName:"plus")) + Text(" Add Task")
                 }
-                    .padding()
+                .padding()
             }
             .frame(width:UIScreen.main.bounds.width)
             .background(Color("BodyBackground"))
@@ -111,40 +114,41 @@ struct StratView: View {
     var id: Int
     
     var body: some View {
-        
-        if strata.getStrata()[id].sleep {
-            VStack {
-                HStack {
-                    Image(systemName:"moon.stars.fill")
-                        .foregroundStyle(.purple)
-                    Text("Sleep").bold()
-                        .font(.title3)
-                    
+        if(strata.getStrata().count > id){ //Bug fix to prevent index-out-of-range error
+            if strata.getStrata()[id].sleep {
+                VStack {
+                    HStack {
+                        Image(systemName:"moon.stars.fill")
+                            .foregroundStyle(.purple)
+                        Text("Sleep").bold()
+                            .font(.title3)
+                        
+                    }
+                    Text("\(strata.getStrata()[id].getDisplayRange())")
+                        .font(.subheadline)
                 }
-                Text("\(strata.getStrata()[id].getDisplayRange())")
-                    .font(.subheadline)
-            }
-            .padding(.all, Consts.scrollPadding)
-        } else {
-            
-            VStack {
-                Text(strata.getStrata()[id].getDisplayRange())
-                    .font(.subheadline)
-                    .padding(.top, Consts.scrollPadding)
-                VStack(spacing:0) {
-                    ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
-                        TaskView(strata:strata, id: i, stratId: id)
+                .padding(.all, Consts.scrollPadding)
+            } else {
+                
+                VStack {
+                    Text(strata.getStrata()[id].getDisplayRange())
+                        .font(.subheadline)
+                        .padding(.top, Consts.scrollPadding)
+                    VStack(spacing:0) {
+                        ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
+                            TaskView(strata:strata, id: i, stratId: id)
+                        }
+                    }
+                    .cornerRadius(Consts.cornerRadius)
+                    .padding(.bottom,Consts.scrollPadding)
+                    NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
+                        Image(systemName:"plus")
                     }
                 }
+                .padding(.all, Consts.scrollPadding)
+                .background(Color("Header"))
                 .cornerRadius(Consts.cornerRadius)
-                .padding(.bottom,Consts.scrollPadding)
-                NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
-                    Image(systemName:"plus")
-                }
             }
-            .padding(.all, Consts.scrollPadding)
-            .background(Color("Header"))
-            .cornerRadius(Consts.cornerRadius)
         }
     }
 }
@@ -161,16 +165,20 @@ struct TaskView: View {
     }
     
     var body: some View {
-        NavigationLink(value: [stratId, id]){
-            HStack {
-                Text(getThisTask().getTitle())
-                    .bold()
-                    .padding(.trailing, Consts.scrollPadding)
-                Text(getThisTask().getBegin().getFormattedTime() + " to " + getThisTask().getEnd().getFormattedTime())
+        if(strata.getStrata().count > stratId){ //Subsequent bug fix
+            if(strata.getStrata()[stratId].getTasks().count > id){ //Fixed index-out-of-range bug
+                NavigationLink(value: [stratId, id]){
+                    HStack {
+                        Text(getThisTask().getTitle())
+                            .bold()
+                            .padding(.trailing, Consts.scrollPadding)
+                        Text(getThisTask().getBegin().getFormattedTime() + " to " + getThisTask().getEnd().getFormattedTime())
+                    }
+                    .foregroundStyle(Color.black)
+                    .frame(width:Consts.scrollWidthStrata, height:CGFloat(getThisTask().getDuration())*Consts.widthToMinutes)
+                    .background(getThisTask().getColor())
+                }
             }
-            .foregroundStyle(Color.black)
-            .frame(width:Consts.scrollWidthStrata, height:CGFloat(getThisTask().getDuration())*Consts.widthToMinutes)
-            .background(getThisTask().getColor())
         }
     }
 }
@@ -189,7 +197,6 @@ struct EditTask: View {
     var newTask: Bool
     
     func edit(){
-        editingTask = []
         if(newTask){
             if(stratId<0){
                 stratId = strata.findStrat(begin:details.begin)
@@ -200,18 +207,25 @@ struct EditTask: View {
         }
         strata.getStrata()[stratId].updateRange()
         strata.organize()
-        strata.manualUpdate()
+        editingTask = []
     }
     
     var body: some View {
         Group{
             VStack(spacing:0) {
-                Text("\(newTask ? "Add" : "Edit") Task")
-                    .font(.title)
-                    .bold()
-                    .padding()
-                    .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
-                    .background(Color("Header"))
+                HStack {
+                    Button(action:{editingTask = []}){
+                        Image(systemName:"xmark")
+                            .imageScale(.large)
+                    }
+                    Text("\(newTask ? "Add" : "Edit") Task")
+                        .font(.title)
+                        .bold()
+
+                }
+                .padding()
+                .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
+                .background(Color("Header"))
                 ScrollView {
                     TextField("Name", text:$details.title)
                         .padding(.all, Consts.scrollPadding)
