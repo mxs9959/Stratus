@@ -38,12 +38,16 @@ struct Consts {
 
 class Config: ObservableObject {
     
-    @Published public var backgroundColor: Color
-    @Published public var accentColor: Color
+    @Published public var sleepBegin: Date
+    @Published public var sleepEnd: Date
+    @Published public var sleepEnabled: Bool
     
     init(){
-        self.backgroundColor = Color(red: 255/255, green:255/255, blue:255/255)
-        self.accentColor = Color(red:0/255, green:48/255, blue:82/255)
+        self.sleepBegin = DateTime(day: 1, month: 1, year: 2024, hour: 22, minute: 0).convertToDate()
+        self.sleepEnd = DateTime(day: 2, month: 1, year: 2024, hour: 6, minute: 0).convertToDate()
+        self.sleepEnabled = true
     }
-    
+    public func getSleepDisplayRange() -> String {
+        return DateTime.convertDateToDT(date: self.sleepBegin).getFormattedTime() + " to " + DateTime.convertDateToDT(date: self.sleepEnd).getFormattedTime()
+    }
 }

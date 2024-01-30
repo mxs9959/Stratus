@@ -33,7 +33,7 @@ struct StratusApp: App {
                         .tag(0)
                     Scheduling()
                         .tabItem {
-                            Label("Settings", systemImage:"gear")
+                            Label("Scheduling", systemImage:"calendar")
                         }
                         .tag(2)
                 }

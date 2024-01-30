@@ -1,5 +1,5 @@
 //
-//  Settings.swift
+//  Scheduling.swift
 //  Stratus
 //
 //  Created by Max Scholle on 11/23/23.
@@ -24,11 +24,18 @@ struct Scheduling: View {
             .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
             .background(Color("Header"))
             Form {
-                
+                Section("Sleep") {
+                    if(config.sleepEnabled){
+                        DatePicker("Sleep start: ", selection: $config.sleepBegin, displayedComponents: [.hourAndMinute])
+                        DatePicker("Sleep end: ", selection: $config.sleepEnd, displayedComponents: [.hourAndMinute])
+                    }
+                    Toggle(isOn:$config.sleepEnabled){
+                        Text("Enable sleep: ")
+                    }
+                }
             }
             .background(Color("BodyBackground"))
             .frame(width: Consts.scrollWidthEditing)
-            .padding(.top, Consts.scrollVerticalPadding)
         }
         .frame(width:UIScreen.main.bounds.width)
         .background(Color("BodyBackground"))

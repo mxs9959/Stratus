@@ -43,7 +43,7 @@ class Strata: ObservableObject {
     
     public func findStrat(begin: Date) -> Int{
         for i in 0..<self.strata.count {
-            if(!self.strata[i].sleep && (self.strata[i].getBegin().compareToDate(date: begin)<=0 && self.strata[i].getEnd().compareToDate(date: begin)>=0)){
+            if(!self.strata[i].freeTime && (self.strata[i].getBegin().compareToDate(date: begin)<=0 && self.strata[i].getEnd().compareToDate(date: begin)>=0)){
                 return i
             }
         }

@@ -84,10 +84,22 @@ struct Home: View {
                         .padding()
                 }
                 Spacer()
+                VStack {
+                    HStack {
+                        Image(systemName:"moon.stars.fill")
+                            .foregroundStyle(.purple)
+                        Text("Sleep").bold()
+                            .font(.title3)
+                        
+                    }
+                    Text(config.getSleepDisplayRange())
+                        .font(.subheadline)
+                }
+                .padding(.all, Consts.scrollPadding)
                 NavigationLink(value:[-1,-1]){
                     Text(Image(systemName:"plus")) + Text(" Add Task")
                 }
-                .padding()
+                .padding(.vertical, Consts.scrollVerticalPadding)
             }
             .frame(width:UIScreen.main.bounds.width)
             .background(Color("BodyBackground"))
@@ -115,40 +127,24 @@ struct StratView: View {
     
     var body: some View {
         if(strata.getStrata().count > id){ //Bug fix to prevent index-out-of-range error
-            if strata.getStrata()[id].sleep {
-                VStack {
-                    HStack {
-                        Image(systemName:"moon.stars.fill")
-                            .foregroundStyle(.purple)
-                        Text("Sleep").bold()
-                            .font(.title3)
-                        
-                    }
-                    Text("\(strata.getStrata()[id].getDisplayRange())")
-                        .font(.subheadline)
-                }
-                .padding(.all, Consts.scrollPadding)
-            } else {
-                
-                VStack {
-                    Text(strata.getStrata()[id].getDisplayRange())
-                        .font(.subheadline)
-                        .padding(.top, Consts.scrollPadding)
-                    VStack(spacing:0) {
-                        ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
-                            TaskView(strata:strata, id: i, stratId: id)
-                        }
-                    }
-                    .cornerRadius(Consts.cornerRadius)
-                    .padding(.bottom,Consts.scrollPadding)
-                    NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
-                        Image(systemName:"plus")
+            VStack {
+                Text(strata.getStrata()[id].getDisplayRange())
+                    .font(.subheadline)
+                    .padding(.top, Consts.scrollPadding)
+                VStack(spacing:0) {
+                    ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
+                        TaskView(strata:strata, id: i, stratId: id)
                     }
                 }
-                .padding(.all, Consts.scrollPadding)
-                .background(Color("Header"))
                 .cornerRadius(Consts.cornerRadius)
+                .padding(.bottom,Consts.scrollPadding)
+                NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
+                    Image(systemName:"plus")
+                }
             }
+            .padding(.all, Consts.scrollPadding)
+            .background(Color("Header"))
+            .cornerRadius(Consts.cornerRadius)
         }
     }
 }

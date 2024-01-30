@@ -14,13 +14,13 @@ class Strat: ObservableObject {
     @Published private var end: DateTime
     @Published private var tasks: [Task]
     
-    public var sleep: Bool
+    public var freeTime: Bool
     
     init() {
         self.begin = DateTime.getNow(rounded: true)
         self.end = DateTime.getNow(rounded: true).addMinutes(minutes: 60)
         self.tasks = []
-        self.sleep = false
+        self.freeTime = false
     }
     
     public func organize(){
@@ -43,7 +43,7 @@ class Strat: ObservableObject {
     }
     
     public func updateRange(){
-        if(!self.sleep){
+        if(!self.freeTime){
             self.organize()
             self.begin = self.tasks[0].getBegin()
             self.end = self.tasks[self.tasks.count-1].getBegin().addMinutes(minutes: self.tasks[self.tasks.count-1].getDuration())
