@@ -39,7 +39,7 @@ struct TemplatesView: View {
                 if(templates.getTemplates().count > 0){
                     List(0..<templates.getTemplates().count, id:\.self){id in
                             TemplateView(templates:templates, editingTemplate: $editingTemplate, id:id)
-                                .listRowBackground(templates.getTemplates()[id].getColor())
+                            .listRowBackground(Color.header)
                                 .swipeActions(allowsFullSwipe: false) {
                                     Button(role:.destructive){
                                         templates.removeTemplate(id: id)
@@ -81,21 +81,23 @@ struct TemplateView: View {
     }
     
     var body: some View {
-        NavigationLink(value:[-1,id]){
-            HStack {
-                Text(getThisTemplate().getName())
-                    .foregroundColor(.black)
-                    .padding(.leading, Consts.scrollPadding)
-                if(getThisTemplate().getMandatory()){
-                    Image(systemName: "star.fill")
+        if(id<templates.getTemplates().count){
+            NavigationLink(value:[-1,id]){
+                HStack {
+                    Text(getThisTemplate().getName())
+                        .foregroundColor(.black)
+                        .padding(.leading, Consts.scrollPadding)
+                    if(getThisTemplate().getMandatory()){
+                        Image(systemName: "star.fill")
+                    }
+                    Spacer()
+                    Text("\(getThisTemplate().getPriority())")
+                        .foregroundColor(.black)
+                        .padding(.all, Consts.scrollPadding)
+                        .background(getThisTemplate().getColor())
+                        .cornerRadius(Consts.cornerRadiusField)
+                        .padding(.trailing, Consts.scrollPadding)
                 }
-                Spacer()
-                Text("\(getThisTemplate().getPriority())")
-                    .foregroundColor(.black)
-                    .padding(.all, Consts.scrollPadding)
-                    .background(Color.accentColor)
-                    .cornerRadius(Consts.cornerRadiusField)
-                    .padding(.trailing, Consts.scrollPadding)
             }
         }
     }

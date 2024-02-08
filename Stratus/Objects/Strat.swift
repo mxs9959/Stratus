@@ -24,22 +24,24 @@ class Strat: ObservableObject {
     }
     
     public func organize(){
-        var output: [Task] = [self.tasks[0]]
-        for i in 1..<self.tasks.count {
-            var j = 0
-            while self.tasks[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
-                j += 1
+        if(self.tasks.count > 0){
+            var output: [Task] = [self.tasks[0]]
+            for i in 1..<self.tasks.count {
+                var j = 0
+                while self.tasks[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
+                    j += 1
+                    if(j==output.count){
+                        break
+                    }
+                }
                 if(j==output.count){
-                    break
+                    output.append(self.tasks[i])
+                } else {
+                    output.insert(self.tasks[i], at:j)
                 }
             }
-            if(j==output.count){
-                output.append(self.tasks[i])
-            } else {
-                output.insert(self.tasks[i], at:j)
-            }
+            self.tasks = output
         }
-        self.tasks = output
     }
     
     public func updateRange(){

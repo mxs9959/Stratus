@@ -75,6 +75,9 @@ class Strata: ObservableObject {
         }
         self.strata = output
     }
+    public func removeStrat(id: Int){
+        self.strata.remove(at:id)
+    }
     
     public func getSleepHours() -> Int{
         return self.sleepTime/60

@@ -37,6 +37,8 @@ struct Home: View {
                         .bold()
                         .padding()
                     NavigationLink(value:[-1,-1]){
+                        Image(systemName:"plus")
+                            .imageScale(.large)
                     }
                 }
                 .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
@@ -50,8 +52,10 @@ struct Home: View {
                             .padding()
                     }
                     Spacer()
-                    Text("\(showingDate.getFormattedDate(weekday:true))")
-                        .padding(.all, Consts.scrollVerticalPadding)
+                    VStack {
+                        Text("\(showingDate.getFormattedDate(weekday:true))")
+                            .padding()
+                    }
                     Spacer()
                     Button(action:{showingDate.addDaysToThis(days: 1)}){
                         Image(systemName:"arrow.right.circle.fill")
@@ -84,34 +88,31 @@ struct Home: View {
                         .padding()
                 }
                 Spacer()
-                VStack {
-                    HStack {
-                        Image(systemName:"moon.stars.fill")
-                            .foregroundStyle(.purple)
-                        Text("Sleep").bold()
-                            .font(.title3)
-                        
+                if(config.sleepEnabled){
+                    VStack {
+                        HStack {
+                            Image(systemName:"moon.stars.fill")
+                                .foregroundStyle(.purple)
+                            Text("Sleep").bold()
+                                .font(.title3)
+                            
+                        }
+                        Text(config.getSleepDisplayRange())
+                            .font(.subheadline)
                     }
-                    Text(config.getSleepDisplayRange())
-                        .font(.subheadline)
+                    .padding(.all, Consts.scrollPadding)
                 }
-                .padding(.all, Consts.scrollPadding)
-                NavigationLink(value:[-1,-1]){
-                    Text(Image(systemName:"plus")) + Text(" Add Task")
-                }
-                .padding(.vertical, Consts.scrollVerticalPadding)
             }
             .frame(width:UIScreen.main.bounds.width)
             .background(Color("BodyBackground"))
             .navigationDestination(for: [Int].self){ids in
-                
                 EditTask(
                     strata:strata,
                     details: detailsToPass(ids: ids),
                     editingTask: $editingTask,
                     stratId: ids[0],
                     taskId: ids[1],
-                    newTask: !(ids[0]>=0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
+                    newTask: !(ids[0]>=0 && strata.getStrata().count > 0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
                 )
                 .navigationBarBackButtonHidden(true)
             }
@@ -205,6 +206,16 @@ struct EditTask: View {
         strata.organize()
         editingTask = []
     }
+    func delete(){
+        if(!newTask){
+            strata.getStrata()[stratId].removeTask(id: taskId)
+            if(!strata.getStrata()[stratId].getTasks().isEmpty){
+                strata.getStrata()[stratId].updateRange()
+                strata.organize()
+            } else {strata.removeStrat(id:stratId)}
+            editingTask = []
+        }
+    }
     
     var body: some View {
         Group{
@@ -252,6 +263,12 @@ struct EditTask: View {
                 }
                 .padding(.vertical, Consts.scrollPadding)
                 .frame(height:.infinity)
+                if(!newTask){
+                    Button(action:delete){
+                        Label("Delete", systemImage:"trash")
+                    }
+                    .foregroundColor(.red)
+                }
                 Button(action:edit){
                     Label("Done", systemImage:"checkmark")
                 }

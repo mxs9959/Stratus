@@ -29,7 +29,7 @@ class Template: ObservableObject, Identifiable {
         self.priority = 5
         self.mandatory = false
         self.duration = 60
-        self.color = Consts.defaultTaskColor
+        self.color = Consts.randomColor()
     }
     
     
