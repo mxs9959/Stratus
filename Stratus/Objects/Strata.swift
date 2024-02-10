@@ -100,6 +100,7 @@ class Strata: ObservableObject {
         return false
     }
     
+    
 }
 
 class Templates: ObservableObject {

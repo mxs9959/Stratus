@@ -160,20 +160,45 @@ struct TaskView: View {
     func getThisTask() -> Task {
         return strata.getStrata()[stratId].getTasks()[id]
     }
+    func getConflict() -> Bool {
+        return strata.getStrata()[stratId].overlapsPrevious(index: id)
+    }
     
     var body: some View {
         if(strata.getStrata().count > stratId){ //Subsequent bug fix
             if(strata.getStrata()[stratId].getTasks().count > id){ //Fixed index-out-of-range bug
                 NavigationLink(value: [stratId, id]){
-                    HStack {
-                        Text(getThisTask().getTitle())
-                            .bold()
-                            .padding(.trailing, Consts.scrollPadding)
-                        Text(getThisTask().getBegin().getFormattedTime() + " to " + getThisTask().getEnd().getFormattedTime())
+                    VStack {
+                        HStack {
+                            if(getThisTask().getMandatory()){
+                                Image(systemName:"star.fill")
+                            }
+                            Text("\(getThisTask().getTitle())")
+                                .bold()
+                                .padding(.trailing, Consts.scrollPadding)
+                            if(getConflict()){
+                                Text("\(getThisTask().getPriority())")
+                                    .foregroundColor(.black)
+                                    .padding(.all, Consts.scrollPadding)
+                                    .background(getThisTask().getColor())
+                                    .cornerRadius(Consts.cornerRadiusField)
+                                    .padding(.trailing, Consts.scrollPadding)
+                            }
+                            Text(getThisTask().getBegin().getFormattedTime() + " to " + getThisTask().getEnd().getFormattedTime())
+                            
+                        }
+                        if(getConflict()){
+                            HStack {
+                                //Image(systemName: "warning")
+                                Text("Warning: this task conflicts with others.")
+                                    .font(.caption2)
+                                    .foregroundColor(.red)
+                            }
+                        }
                     }
-                    .foregroundStyle(Color.black)
                     .frame(width:Consts.scrollWidthStrata, height:CGFloat(getThisTask().getDuration())*Consts.widthToMinutes)
-                    .background(getThisTask().getColor())
+                    .foregroundStyle(getConflict() ? Color.red : Color.black)
+                    .background(getConflict() ? Color("BodyBackground") : getThisTask().getColor())
                 }
             }
         }

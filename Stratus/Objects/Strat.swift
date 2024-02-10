@@ -28,17 +28,23 @@ class Strat: ObservableObject {
             var output: [Task] = [self.tasks[0]]
             for i in 1..<self.tasks.count {
                 var j = 0
-                while self.tasks[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
-                    j += 1
-                    if(j==output.count){
-                        break
-                    }
+                while j<output.count {
+                    if self.tasks[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
+                        j += 1
+                    } else if self.tasks[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate()) == 0 {
+                        if !self.tasks[i].getMandatory() && output[j].getMandatory(){
+                            j += 1
+                        } else if !self.tasks[i].getMandatory() && self.tasks[i].getPriority() < output[j].getPriority(){
+                            j += 1
+                        } else {break}
+                    } else {break}
                 }
                 if(j==output.count){
                     output.append(self.tasks[i])
                 } else {
                     output.insert(self.tasks[i], at:j)
                 }
+                
             }
             self.tasks = output
         }
@@ -57,6 +63,15 @@ class Strat: ObservableObject {
             return self.begin.getFormattedDate(weekday:false) + " " + self.begin.getFormattedTime() + " to " + self.end.getFormattedDate(weekday:false) + " " + self.end.getFormattedTime()
         } else {
             return self.begin.getFormattedDate(weekday:false) + ", " + self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
+        }
+    }
+    
+
+    public func overlapsPrevious(index: Int) -> Bool{
+        if(index > 0){
+            return self.tasks[index].getBegin().compareToDate(date: self.tasks[index-1].getEnd().convertToDate()) < 0
+        } else {
+            return false;
         }
     }
     
