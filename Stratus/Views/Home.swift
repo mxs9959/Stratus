@@ -32,6 +32,10 @@ struct Home: View {
                 
                 //HEADER
                 HStack {
+                    NavigationLink(value:[-1,-1,-1]){
+                        Image(systemName:"info.circle")
+                            .imageScale(.large)
+                    }
                     Text("Your Strats")
                         .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                         .bold()
@@ -101,30 +105,36 @@ struct Home: View {
                         }
                         .padding(.all, Consts.scrollPadding)
                     }
-                    VStack {
-                        Text("\(Int(Double(strata.getFreeTimeForDay(day: showingDate))/(config.freeTimeTarget*60)*100))%")
-                        Text("Free Time Goal Met")
-                            .font(.caption2)
-                    }
-                    .foregroundColor(.black)
+                    if(config.freeTimeEnabled){
+                        VStack {
+                            Text("\(Int(Double(strata.getFreeTimeForDay(day: showingDate))/(config.freeTimeTarget*60)*100))%")
+                            Text("Free Time Goal Met")
+                                .font(.caption2)
+                        }
+                        .foregroundColor(.black)
                         .padding(.all, Consts.scrollPadding)
                         .background(Color.accentColor)
                         .cornerRadius(Consts.cornerRadiusField)
                         .padding(.trailing, Consts.scrollPadding)
+                    }
                 }
             }
             .frame(width:UIScreen.main.bounds.width)
             .background(Color("BodyBackground"))
             .navigationDestination(for: [Int].self){ids in
-                EditTask(
-                    strata:strata,
-                    details: detailsToPass(ids: ids),
-                    editingTask: $editingTask,
-                    stratId: ids[0],
-                    taskId: ids[1],
-                    newTask: !(ids[0]>=0 && strata.getStrata().count > 0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
-                )
-                .navigationBarBackButtonHidden(true)
+                if(ids.count == 3){
+                    About()
+                } else {
+                    EditTask(
+                        strata:strata,
+                        details: detailsToPass(ids: ids),
+                        editingTask: $editingTask,
+                        stratId: ids[0],
+                        taskId: ids[1],
+                        newTask: !(ids[0]>=0 && strata.getStrata().count > 0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
+                    )
+                    .navigationBarBackButtonHidden(true)
+                }
             }
         }
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2700DCA92B791A4300459646 /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2700DCA82B791A4300459646 /* About.swift */; };
 		2708A65A2B78255300F1389F /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2708A6592B78255300F1389F /* Goal.swift */; };
 		27FAECF02B0E6E1300DF612D /* StratusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAECEF2B0E6E1300DF612D /* StratusApp.swift */; };
 		27FAECF22B0E6E1300DF612D /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAECF12B0E6E1300DF612D /* Home.swift */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2700DCA82B791A4300459646 /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		2708A6592B78255300F1389F /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		27FAECEC2B0E6E1300DF612D /* Stratus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stratus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27FAECEF2B0E6E1300DF612D /* StratusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratusApp.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				27FAECF12B0E6E1300DF612D /* Home.swift */,
 				27FAED2C2B0FA1BF00DF612D /* Templates.swift */,
 				27FAED282B0F934400DF612D /* Scheduling.swift */,
+				2700DCA82B791A4300459646 /* About.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 			files = (
 				27FAED202B0E7AA600DF612D /* Strat.swift in Sources */,
 				27FAED1E2B0E6F4D00DF612D /* Template.swift in Sources */,
+				2700DCA92B791A4300459646 /* About.swift in Sources */,
 				27FAED222B0E7C5200DF612D /* DateTime.swift in Sources */,
 				27FAECF22B0E6E1300DF612D /* Home.swift in Sources */,
 				27FAED292B0F934400DF612D /* Scheduling.swift in Sources */,
