@@ -52,10 +52,9 @@ struct Home: View {
                             .padding()
                     }
                     Spacer()
-                    VStack {
-                        Text("\(showingDate.getFormattedDate(weekday:true))")
+                    Text("\(showingDate.getFormattedDate(weekday:true))")
                             .padding()
-                    }
+                    
                     Spacer()
                     Button(action:{showingDate.addDaysToThis(days: 1)}){
                         Image(systemName:"arrow.right.circle.fill")
@@ -63,7 +62,6 @@ struct Home: View {
                             .padding()
                     }
                 }
-                //.background(Color("Header2"))
                 
                 if(strata.stratsOnDay(day: showingDate)){
                     //Listing strats
@@ -88,19 +86,31 @@ struct Home: View {
                         .padding()
                 }
                 Spacer()
-                if(config.sleepEnabled){
-                    VStack {
-                        HStack {
-                            Image(systemName:"moon.stars.fill")
-                                .foregroundStyle(.purple)
-                            Text("Sleep").bold()
-                                .font(.title3)
-                            
+                HStack {
+                    if(config.sleepEnabled){
+                        VStack {
+                            HStack {
+                                Image(systemName:"moon.stars.fill")
+                                    .foregroundStyle(.purple)
+                                Text("Sleep").bold()
+                                    .font(.title3)
+                                
+                            }
+                            Text(config.getSleepDisplayRange())
+                                .font(.subheadline)
                         }
-                        Text(config.getSleepDisplayRange())
-                            .font(.subheadline)
+                        .padding(.all, Consts.scrollPadding)
                     }
-                    .padding(.all, Consts.scrollPadding)
+                    VStack {
+                        Text("\(Int(Double(strata.getFreeTimeForDay(day: showingDate))/(config.freeTimeTarget*60)*100))%")
+                        Text("Free Time Goal Met")
+                            .font(.caption2)
+                    }
+                    .foregroundColor(.black)
+                        .padding(.all, Consts.scrollPadding)
+                        .background(Color.accentColor)
+                        .cornerRadius(Consts.cornerRadiusField)
+                        .padding(.trailing, Consts.scrollPadding)
                 }
             }
             .frame(width:UIScreen.main.bounds.width)
@@ -128,24 +138,34 @@ struct StratView: View {
     
     var body: some View {
         if(strata.getStrata().count > id){ //Bug fix to prevent index-out-of-range error
-            VStack {
-                Text(strata.getStrata()[id].getDisplayRange())
-                    .font(.subheadline)
-                    .padding(.top, Consts.scrollPadding)
-                VStack(spacing:0) {
-                    ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
-                        TaskView(strata:strata, id: i, stratId: id)
+            if(strata.getStrata()[id].getFreeTime()){
+                VStack {
+                    Text(Consts.randomEmoji() + " Free Time").bold()
+                            .font(.title3)
+                    Text(strata.getStrata()[id].getDisplayRange())
+                        .font(.subheadline)
+                }
+                .padding(.all, Consts.scrollPadding)
+            } else {
+                VStack {
+                    Text(strata.getStrata()[id].getDisplayRange())
+                        .font(.subheadline)
+                        .padding(.top, Consts.scrollPadding)
+                    VStack(spacing:0) {
+                        ForEach(0..<strata.getStrata()[id].getTasks().count, id:\.self){ i in
+                            TaskView(strata:strata, id: i, stratId: id)
+                        }
+                    }
+                    .cornerRadius(Consts.cornerRadius)
+                    .padding(.bottom,Consts.scrollPadding)
+                    NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
+                        Image(systemName:"plus")
                     }
                 }
+                .padding(.all, Consts.scrollPadding)
+                .background(Color("Header"))
                 .cornerRadius(Consts.cornerRadius)
-                .padding(.bottom,Consts.scrollPadding)
-                NavigationLink(value:[id,strata.getStrata()[id].getTasks().count]){
-                    Image(systemName:"plus")
-                }
             }
-            .padding(.all, Consts.scrollPadding)
-            .background(Color("Header"))
-            .cornerRadius(Consts.cornerRadius)
         }
     }
 }

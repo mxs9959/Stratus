@@ -23,7 +23,7 @@ struct StratusApp: App {
                 Group {
                     TemplatesView()
                         .tabItem {
-                            Label("Templates", systemImage:"doc")
+                            Label("Goals", systemImage:"target")
                         }
                         .tag(1)
                     Home()

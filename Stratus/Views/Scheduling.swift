@@ -24,13 +24,29 @@ struct Scheduling: View {
             .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
             .background(Color("Header"))
             Form {
-                Section("Sleep") {
-                    if(config.sleepEnabled){
-                        DatePicker("Sleep start: ", selection: $config.sleepBegin, displayedComponents: [.hourAndMinute])
-                        DatePicker("Sleep end: ", selection: $config.sleepEnd, displayedComponents: [.hourAndMinute])
+                Group {
+                    Section("Free Time") {
+                        Toggle(isOn: $config.freeTimeEnabled){
+                            Text("Enable free time:")
+                        }
+                        if(config.freeTimeEnabled){
+                            HStack {
+                                Text("Daily Free Time Goal:")
+                                Slider(value: $config.freeTimeTarget, in: 0...24)
+                                    .padding(.horizontal, Consts.scrollPadding)
+                                Text("\(Int(config.freeTimeTarget)) hrs")
+                            }
+                        }
                     }
-                    Toggle(isOn:$config.sleepEnabled){
-                        Text("Enable sleep: ")
+                    Section("Sleep") {
+                        Toggle(isOn:$config.sleepEnabled){
+                            Text("Enable sleep: ")
+                        }
+                        if(config.sleepEnabled){
+                            DatePicker("Sleep start: ", selection: $config.sleepBegin, displayedComponents: [.hourAndMinute])
+                            DatePicker("Sleep end: ", selection: $config.sleepEnd, displayedComponents: [.hourAndMinute])
+                        }
+                        
                     }
                 }
             }

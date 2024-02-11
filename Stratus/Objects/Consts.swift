@@ -18,7 +18,7 @@ struct Consts {
     static var cornerRadius: CGFloat = 25
     static var widthToMinutes: CGFloat = 1.25
     
-    static var scrollWidthEditing: CGFloat = UIScreen.main.bounds.width - 2*25
+    static var scrollWidthEditing: CGFloat = UIScreen.main.bounds.width - 2*10
     static var cornerRadiusField: CGFloat = 10
     
     static var scrollWidthTemplates: CGFloat = UIScreen.main.bounds.width - 2*20
@@ -42,12 +42,18 @@ class Config: ObservableObject {
     @Published public var sleepEnd: Date
     @Published public var sleepEnabled: Bool
     
+    @Published public var freeTimeEnabled: Bool
+    @Published public var freeTimeTarget: Double
+    
     init(){
         self.sleepBegin = DateTime(day: 1, month: 1, year: 2024, hour: 22, minute: 0).convertToDate()
         self.sleepEnd = DateTime(day: 2, month: 1, year: 2024, hour: 6, minute: 0).convertToDate()
         self.sleepEnabled = true
+        self.freeTimeTarget = 4
+        self.freeTimeEnabled = true
     }
     public func getSleepDisplayRange() -> String {
         return DateTime.convertDateToDT(date: self.sleepBegin).getFormattedTime() + " to " + DateTime.convertDateToDT(date: self.sleepEnd).getFormattedTime()
     }
+    
 }

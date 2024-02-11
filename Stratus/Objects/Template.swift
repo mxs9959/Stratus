@@ -120,6 +120,13 @@ class TemplateDetails: ObservableObject {
         self.duration = "\(details.3)"
         self.color = details.4
     }
+    init(){
+        self.name = "Sample template"
+        self.priority = 5
+        self.mandatory = false
+        self.duration = "60"
+        self.color = Consts.randomColor()
+    }
 }
 
 class TaskDetails: TemplateDetails {

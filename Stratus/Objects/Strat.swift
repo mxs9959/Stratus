@@ -10,17 +10,22 @@ import SwiftUI
 
 class Strat: ObservableObject {
     
-    @Published private var begin: DateTime //Strats cover a certain duration of the user's schedule
+    @Published private var begin: DateTime //Strata cover a certain duration of the user's schedule
     @Published private var end: DateTime
     @Published private var tasks: [Task]
+    @Published private var freeTime: Bool
     
-    public var freeTime: Bool
-    
-    init() {
+    init() { //Initializer for general strata
         self.begin = DateTime.getNow(rounded: true)
         self.end = DateTime.getNow(rounded: true).addMinutes(minutes: 60)
         self.tasks = []
         self.freeTime = false
+    }
+    init(begin: DateTime, end: DateTime){ //Initializer for freeTime strata
+        self.begin = begin
+        self.end = end
+        self.tasks = []
+        self.freeTime = true
     }
     
     public func organize(){
@@ -62,7 +67,7 @@ class Strat: ObservableObject {
         if(!self.begin.equals(dateTime: self.end, onlyDate:true)){
             return self.begin.getFormattedDate(weekday:false) + " " + self.begin.getFormattedTime() + " to " + self.end.getFormattedDate(weekday:false) + " " + self.end.getFormattedTime()
         } else {
-            return self.begin.getFormattedDate(weekday:false) + ", " + self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
+            return self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
         }
     }
     
@@ -71,18 +76,20 @@ class Strat: ObservableObject {
         if(index > 0){
             return self.tasks[index].getBegin().compareToDate(date: self.tasks[index-1].getEnd().convertToDate()) < 0
         } else {
-            return false;
+            return false
         }
     }
     
     public func getNewTask() -> Task{
         self.tasks.append(Task(begin:DateTime.getNow(rounded:true)))
+        self.freeTime = false
         return self.tasks[self.tasks.count-1]
     }
     public func addTasks(tasks: [Task]){
-        for task in tasks {
-            self.tasks.append(task)
-        }
+            for task in tasks {
+                self.tasks.append(task)
+            }
+        if(self.tasks.count > 0){self.freeTime = false}
     }
     public func replaceTask(task: Task, id: Int){
         self.tasks[id] = task
@@ -92,6 +99,7 @@ class Strat: ObservableObject {
     }
     public func removeTask(id: Int){
         self.tasks.remove(at:id)
+        if(self.tasks.count == 0) {self.freeTime = true}
     }
     public func getBegin() -> DateTime {
         self.updateRange()
@@ -100,6 +108,9 @@ class Strat: ObservableObject {
     public func getEnd() -> DateTime {
         self.updateRange()
         return self.end
+    }
+    public func getFreeTime() -> Bool{
+        return self.freeTime
     }
     
 }
