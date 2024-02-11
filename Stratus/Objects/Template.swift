@@ -14,8 +14,9 @@ class Template: ObservableObject, Identifiable {
     @Published private var mandatory: Bool
     @Published private var duration: Int //Duration in minutes
     @Published private var color: Color
+    @Published private var recurrence: Int
     
-    init(name: String, priority: Int, mandatory: Bool, duration: Int, color: Color) {
+    init(name: String, priority: Int, mandatory: Bool, duration: Int, color: Color, recurrence: Int) {
         if(priority>=0 && priority<=10){
             self.priority = priority
         }
@@ -23,6 +24,7 @@ class Template: ObservableObject, Identifiable {
         self.duration = duration
         self.name = name
         self.color = color
+        self.recurrence = recurrence
     }
     init(){
         self.name = "Sample template"
@@ -30,11 +32,12 @@ class Template: ObservableObject, Identifiable {
         self.mandatory = false
         self.duration = 60
         self.color = Consts.randomColor()
+        self.recurrence = 0
     }
     
     
-    public func getTemplateDetails() -> (String, Int, Bool, Int, Color){
-        return (self.name, self.priority, self.mandatory, self.duration, self.color)
+    public func getTemplateDetails() -> (String, Int, Bool, Int, Color, Int){
+        return (self.name, self.priority, self.mandatory, self.duration, self.color, self.recurrence)
     }
     
     public func setPriority(priority: Int){
@@ -66,6 +69,9 @@ class Template: ObservableObject, Identifiable {
     public func setColor(color: Color) {
         self.color = color
     }
+    public func getRecurrence() -> Int{
+        return self.recurrence
+    }
 }
 
 class Task: Template {
@@ -75,7 +81,7 @@ class Task: Template {
     init(priority: Int, mandatory: Bool, duration: Int, begin: DateTime, color: Color, title: String){
         self.begin = begin
         self.title = title
-        super.init(name: "custom", priority: priority, mandatory: mandatory, duration: duration, color:color)
+        super.init(name: "custom", priority: priority, mandatory: mandatory, duration: duration, color:color, recurrence:0)
     }
     init(begin: DateTime){
         self.begin = begin
@@ -112,13 +118,15 @@ class TemplateDetails: ObservableObject {
     @Published public var mandatory: Bool
     @Published public var duration: String
     @Published public var color: Color
+    @Published public var recurrence: Int
     
-    init(details: (String, Int, Bool, Int, Color)){
+    init(details: (String, Int, Bool, Int, Color, Int)){
         self.name = details.0
         self.priority = Double(details.1)
         self.mandatory = details.2
         self.duration = "\(details.3)"
         self.color = details.4
+        self.recurrence = details.5
     }
     init(){
         self.name = "Sample template"
@@ -126,6 +134,7 @@ class TemplateDetails: ObservableObject {
         self.mandatory = false
         self.duration = "60"
         self.color = Consts.randomColor()
+        self.recurrence = 0
     }
 }
 
@@ -137,13 +146,13 @@ class TaskDetails: TemplateDetails {
     init(details: (String, Int, Bool, Int, Color, DateTime)){
         self.title = details.0
         self.begin = details.5.convertToDate()
-        super.init(details:("custom", details.1, details.2, details.3, details.4))
+        super.init(details:("custom", details.1, details.2, details.3, details.4, 0))
     }
     
-    override init(details: (String, Int, Bool, Int, Color)){
+    override init(details: (String, Int, Bool, Int, Color, Int)){
         self.title = details.0
         self.begin = DateTime.getNow(rounded:false).convertToDate()
-        super.init(details:("custom", details.1, details.2, details.3, details.4))
+        super.init(details:("custom", details.1, details.2, details.3, details.4, details.5))
     }
     
     public static func getSampleDetails() -> (String, Int, Bool, Int, Color, DateTime){

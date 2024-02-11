@@ -123,7 +123,7 @@ class Goals: ObservableObject {
     @Published private var goals: [Goal]
     
     init(){
-        self.goals = [Goal(name: "Unassigned Templates")] //goals[0] is reserved for unassigned templates
+        self.goals = [Goal(name: "Unassigned Templates")]
     }
     
     public func manualUpdate(){

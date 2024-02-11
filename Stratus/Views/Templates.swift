@@ -37,19 +37,21 @@ struct TemplatesView: View {
                 //BODY
                 if(goals.anyTemplates()){
                     List(0..<goals.getGoals().count, id:\.self){goalId in
-                        Section(header: Text("\(goals.getGoals()[goalId].getName())")){
-                            ForEach(0..<goals.getGoals()[goalId].getTemplates().count, id:\.self){id in
-                                TemplateView(goals:goals, editingTemplate: $editingTemplate, goalId: goalId, id:id)
-                                    .listRowBackground(Color.header)
-                                    .swipeActions(allowsFullSwipe: false) {
-                                        Button(role:.destructive){
-                                            goals.getGoals()[goalId].removeTemplate(id: id)
-                                            goals.manualUpdate()
-                                        } label: {Label("Delete", systemImage:"trash.fill")}
-                                        Button {
-                                            editingTemplate = [[goalId, id]]
-                                        } label: {Label("Edit", systemImage:"pencil")}
-                                    }
+                        if(goals.getGoals()[goalId].getTemplates().count > 0){
+                            Section(header: Text("\(goals.getGoals()[goalId].getName())")){
+                                ForEach(0..<goals.getGoals()[goalId].getTemplates().count, id:\.self){id in
+                                    TemplateView(goals:goals, editingTemplate: $editingTemplate, goalId: goalId, id:id)
+                                        .listRowBackground(Color.header)
+                                        .swipeActions(allowsFullSwipe: false) {
+                                            Button(role:.destructive){
+                                                goals.getGoals()[goalId].removeTemplate(id: id)
+                                                goals.manualUpdate()
+                                            } label: {Label("Delete", systemImage:"trash.fill")}
+                                            Button {
+                                                editingTemplate = [[goalId, id]]
+                                            } label: {Label("Edit", systemImage:"pencil")}
+                                        }
+                                }
                             }
                         }
                     }
@@ -65,10 +67,10 @@ struct TemplatesView: View {
             .navigationDestination(for: [Int].self){id in
                 if(id[0]>=0){
                     if(id[1]>=0){
-                        EditTemplate(goals: goals, details: TemplateDetails(details: goals.getGoals()[id[0]].getTemplates()[id[1]].getTemplateDetails()), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), newTemplate: false, goalId: id[0], id: id[1])
+                        EditTemplate(goals: goals, details: TemplateDetails(details: goals.getGoals()[id[0]].getTemplates()[id[1]].getTemplateDetails()), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), goalId: id[0], originalGoalId: id[0], newTemplate: false, id: id[1])
                             .navigationBarBackButtonHidden(true)
                     } else {
-                        EditTemplate(goals: goals, details:TemplateDetails(), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), newTemplate: true, goalId: 0, id: 0)
+                        EditTemplate(goals: goals, details:TemplateDetails(), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), goalId: 0, originalGoalId: id[0], newTemplate: true, id: 0)
                             .navigationBarBackButtonHidden(true)
                     }
                 } else {
@@ -104,6 +106,10 @@ struct TemplateView: View {
                         Image(systemName: "star.fill")
                     }
                     Spacer()
+                    if(getThisTemplate().getRecurrence() > 0){
+                        Text("\(getThisTemplate().getRecurrence())")
+                    }
+                    Spacer()
                     Text("\(getThisTemplate().getPriority())")
                         .foregroundColor(.black)
                         .padding(.all, Consts.scrollPadding)
@@ -127,24 +133,27 @@ struct EditTemplate: View {
     @Binding var editingTemplate: [[Int]]
     
     @State var goalName: String
-    @State var newGoal: Bool = false
-    
-    var newTemplate: Bool
     @State var goalId: Int
-    @State var goalAssignment: Int = 0
+    
+    var originalGoalId: Int
+    var newTemplate: Bool
     var id: Int
     
     func edit(){
         editingTemplate = []
+        let newGoal: Bool = goalId==goals.getGoals().count
         if(newGoal){
             goalId = goals.getGoals().count
             goals.createGoal(name: goalName)
         }
         goals.changeGoalName(id:goalId, name:goalName)
         if(newTemplate || newGoal){
-            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color))
+            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
+        } else if(goalId != originalGoalId){
+            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
+            goals.getGoals()[originalGoalId].removeTemplate(id:id)
         } else {
-            goals.replaceTemplateInGoal(id: id, goalId: goalId, template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color))
+            goals.replaceTemplateInGoal(id: id, goalId: goalId, template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
         }
         goals.manualUpdate()
     }
@@ -191,21 +200,41 @@ struct EditTemplate: View {
                         }
                         Section(header:Text("Goal Assignment")){
                             HStack {
-                                Picker("Goal Assignment", selection:$goalAssignment){
-                                    ForEach(0..<goals.getGoals().count, id:\.self){ i in
-                                        Text(goals.getGoals()[i].getName())
+                                Picker("Goal Assignment", selection:$goalId){
+                                    ForEach(0...goals.getGoals().count, id:\.self){ i in
+                                        if(i<goals.getGoals().count){
+                                            Text(goals.getGoals()[i].getName())
+                                        } else {
+                                            Text("Create new goal...")
+                                        }
                                     }
                                 }
-                                .foregroundColor(Color.accentColor)
+                                .onChange(of:goalId){
+                                    if(goalId<goals.getGoals().count){
+                                        goalName = goals.getGoals()[goalId].getName()
+                                    }
+                                }
                             }
                             HStack{
-                                Text("Rename \"\(goals.getGoals()[goalAssignment].getName())\":")
+                                if(goalId==goals.getGoals().count){
+                                    Text("Name your new goal:")
+                                } else {
+                                    Text("Rename \"\(goals.getGoals()[goalId].getName())\":")
+                                }
                                 Spacer()
                                 TextField("", text:$goalName)
                                     .foregroundColor(Color.accentColor)
                             }
-                            Toggle(isOn: $newGoal){
-                                Text("Add to new goal:")
+                        }
+                        Section("Recurrence"){
+                            HStack {
+                                Stepper(onIncrement: {details.recurrence += 1}, onDecrement: {if(details.recurrence>0){details.recurrence -= 1}}){
+                                    if(details.recurrence == 0){
+                                        Text("Repeat never")
+                                    } else {
+                                        Text("Repeat every \(details.recurrence) day(s)")
+                                    }
+                                }
                             }
                         }
                     }
