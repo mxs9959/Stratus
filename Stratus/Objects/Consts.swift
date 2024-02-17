@@ -45,12 +45,15 @@ class Config: ObservableObject {
     @Published public var freeTimeEnabled: Bool
     @Published public var freeTimeTarget: Double
     
+    @Published public var goalsEnabled: [Bool]
+    
     init(){
         self.sleepBegin = DateTime(day: 1, month: 1, year: 2024, hour: 22, minute: 0).convertToDate()
         self.sleepEnd = DateTime(day: 2, month: 1, year: 2024, hour: 6, minute: 0).convertToDate()
         self.sleepEnabled = true
         self.freeTimeTarget = 4
         self.freeTimeEnabled = true
+        self.goalsEnabled = [true]
     }
     public func getSleepDisplayRange() -> String {
         return DateTime.convertDateToDT(date: self.sleepBegin).getFormattedTime() + " to " + DateTime.convertDateToDT(date: self.sleepEnd).getFormattedTime()

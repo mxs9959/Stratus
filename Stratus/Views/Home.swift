@@ -105,7 +105,7 @@ struct Home: View {
                         }
                         .padding(.all, Consts.scrollPadding)
                     }
-                    if(config.freeTimeEnabled){
+                    if(config.freeTimeEnabled && strata.stratsOnDay(day: showingDate)){
                         VStack {
                             Text("\(Int(Double(strata.getFreeTimeForDay(day: showingDate))/(config.freeTimeTarget*60)*100))%")
                             Text("Free Time Goal Met")
@@ -126,7 +126,6 @@ struct Home: View {
                     About()
                 } else {
                     EditTask(
-                        strata:strata,
                         details: detailsToPass(ids: ids),
                         editingTask: $editingTask,
                         stratId: ids[0],
@@ -238,8 +237,7 @@ struct TaskView: View {
 struct EditTask: View {
     
     @EnvironmentObject var config: Config
-    
-    @ObservedObject var strata: Strata
+    @EnvironmentObject var strata: Strata
     
     @StateObject var details: TaskDetails
     @Binding var editingTask: [[Int]]

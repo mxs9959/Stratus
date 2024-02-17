@@ -12,6 +12,7 @@ struct StratusApp: App {
     
     @StateObject var config = Config()
     @StateObject var strata = Strata()
+    @StateObject var goals = Goals()
     
     @State private var selection = 0
     
@@ -42,6 +43,7 @@ struct StratusApp: App {
             }
             .environmentObject(config)
             .environmentObject(strata)
+            .environmentObject(goals)
         }
     }
 }

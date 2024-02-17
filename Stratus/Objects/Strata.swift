@@ -10,19 +10,13 @@ import SwiftUI
 
 class Strata: ObservableObject {
     
-    @Published private var strata: [Strat] {
-        willSet{
-            objectWillChange.send()
-        }
-    }
+    @Published private var strata: [Strat]
     @Published private var sleepTime: Int //Sleep time in minutes
-    @Published private var stratLoadingScope: (DateTime, DateTime)
     @Published private var freeTimeTotal: Int //Free time total in minutes
     
     init(){
         self.strata = []
         self.sleepTime = 480
-        self.stratLoadingScope = (DateTime.getNow(rounded: true).addMinutes(minutes: -1440).midnight(), DateTime.getNow(rounded: true).addMinutes(minutes: 8640).midnight()) //Default range for populating strata is one day behind through five days ahead
         self.freeTimeTotal = 960
     }
     
@@ -82,6 +76,11 @@ class Strata: ObservableObject {
         }
         self.strata = output
     }
+    
+    public func populateRecurring(goals: Goals){
+        
+    }
+    
     public func removeStrat(id: Int){
         self.strata.remove(at:id)
     }
@@ -143,8 +142,9 @@ class Goals: ObservableObject {
         return self.goals
     }
     
-    public func createGoal(name: String){
+    public func createGoal(name: String, config: Config){
         self.goals.append(Goal(name:name))
+        self.refreshGoalsEnabled(config: config)
     }
     
     public func createTemplate(){
@@ -156,8 +156,30 @@ class Goals: ObservableObject {
         self.goals[goalId].replaceTemplate(id: id, template:template)
     }
     
+    public func removeTemplateInGoal(id: Int, goalId: Int, config: Config) {
+        self.goals[goalId].removeTemplate(id: id)
+        if(self.goals[goalId].getTemplates().count == 0 && self.goals.count >= 2){
+            self.goals.remove(at: goalId)
+            self.refreshGoalsEnabled(config: config)
+        }
+        
+    }
+    
     public func changeGoalName(id: Int, name: String){
         self.goals[id].setName(name:name)
+    }
+    
+    public func refreshGoalsEnabled(config: Config){
+        var result: [Bool] = []
+        for goal in self.goals {
+            result.append(goal.getEnabled())
+        }
+        config.goalsEnabled = result
+    }
+    public func updateFromConfig(config: Config){
+        for i in 0..<self.goals.count {
+            self.goals[i].setEnabled(enabled: config.goalsEnabled[i])
+        }
     }
     
 }

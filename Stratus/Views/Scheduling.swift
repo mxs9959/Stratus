@@ -12,6 +12,9 @@ struct Scheduling: View {
     
     @EnvironmentObject var strata: Strata
     @EnvironmentObject var config: Config
+    @EnvironmentObject var goals: Goals
+    
+    
     
     var body: some View {
         VStack(spacing:0) {
@@ -39,7 +42,7 @@ struct Scheduling: View {
                         }
                     }
                     Section("Sleep") {
-                        Toggle(isOn:$config.sleepEnabled){
+                        Toggle(isOn: $config.sleepEnabled){
                             Text("Enable sleep: ")
                         }
                         if(config.sleepEnabled){
@@ -47,6 +50,14 @@ struct Scheduling: View {
                             DatePicker("Sleep end: ", selection: $config.sleepEnd, displayedComponents: [.hourAndMinute])
                         }
                         
+                    }
+                    Section("Enable Recurring Goals"){
+                        ForEach(0..<goals.getGoals().count, id:\.self){i in
+                            Toggle(isOn:$config.goalsEnabled[i]){
+                                Text(goals.getGoals()[i].getName())
+                            }
+                            .onChange(of: config.goalsEnabled[i], {goals.updateFromConfig(config: config)})
+                        }
                     }
                 }
             }
@@ -59,5 +70,5 @@ struct Scheduling: View {
 }
 
 #Preview {
-    Scheduling().environmentObject(Config()).environmentObject(Strata())
+    Scheduling().environmentObject(Config()).environmentObject(Strata()).environmentObject(Goals())
 }

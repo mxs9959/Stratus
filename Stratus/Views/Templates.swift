@@ -11,8 +11,7 @@ struct TemplatesView: View {
     
     @EnvironmentObject var strata: Strata
     @EnvironmentObject var config: Config
-    
-    @StateObject var goals: Goals = Goals()
+    @EnvironmentObject var goals: Goals
     
     @State var editingTemplate: [[Int]] = []
     
@@ -40,11 +39,11 @@ struct TemplatesView: View {
                         if(goals.getGoals()[goalId].getTemplates().count > 0){
                             Section(header: Text("\(goals.getGoals()[goalId].getName())")){
                                 ForEach(0..<goals.getGoals()[goalId].getTemplates().count, id:\.self){id in
-                                    TemplateView(goals:goals, editingTemplate: $editingTemplate, goalId: goalId, id:id)
+                                    TemplateView(editingTemplate: $editingTemplate, goalId: goalId, id:id)
                                         .listRowBackground(Color.header)
                                         .swipeActions(allowsFullSwipe: false) {
                                             Button(role:.destructive){
-                                                goals.getGoals()[goalId].removeTemplate(id: id)
+                                                goals.removeTemplateInGoal(id: id, goalId: goalId, config: config)
                                                 goals.manualUpdate()
                                             } label: {Label("Delete", systemImage:"trash.fill")}
                                             Button {
@@ -67,14 +66,14 @@ struct TemplatesView: View {
             .navigationDestination(for: [Int].self){id in
                 if(id[0]>=0){
                     if(id[1]>=0){
-                        EditTemplate(goals: goals, details: TemplateDetails(details: goals.getGoals()[id[0]].getTemplates()[id[1]].getTemplateDetails()), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), goalId: id[0], originalGoalId: id[0], newTemplate: false, id: id[1])
+                        EditTemplate(details: TemplateDetails(details: goals.getGoals()[id[0]].getTemplates()[id[1]].getTemplateDetails()), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), goalId: id[0], originalGoalId: id[0], newTemplate: false, id: id[1])
                             .navigationBarBackButtonHidden(true)
                     } else {
-                        EditTemplate(goals: goals, details:TemplateDetails(), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), goalId: 0, originalGoalId: id[0], newTemplate: true, id: 0)
+                        EditTemplate(details:TemplateDetails(), editingTemplate: $editingTemplate, goalName: goals.getGoals()[id[0]].getName(), goalId: 0, originalGoalId: id[0], newTemplate: true, id: 0)
                             .navigationBarBackButtonHidden(true)
                     }
                 } else {
-                    EditTask(strata: strata, details: TaskDetails(details: goals.getGoals()[-id[0]-1].getTemplates()[id[1]].getTemplateDetails()), editingTask: $editingTemplate, stratId: -1, taskId: -1, newTask: true)
+                    EditTask(details: TaskDetails(details: goals.getGoals()[-id[0]-1].getTemplates()[id[1]].getTemplateDetails()), editingTask: $editingTemplate, stratId: -1, taskId: -1, newTask: true)
                         .navigationBarBackButtonHidden(true)
                 }
             }
@@ -84,7 +83,7 @@ struct TemplatesView: View {
 
 struct TemplateView: View {
     
-    @ObservedObject var goals: Goals
+    @EnvironmentObject var goals: Goals
     
     @Binding var editingTemplate: [[Int]]
     
@@ -96,7 +95,7 @@ struct TemplateView: View {
     }
     
     var body: some View {
-        if(id<goals.getGoals()[goalId].getTemplates().count){
+        if(goalId<goals.getGoals().count && id<goals.getGoals()[goalId].getTemplates().count){
             NavigationLink(value:[-goalId-1,id]){
                 HStack {
                     Text(getThisTemplate().getName())
@@ -125,8 +124,7 @@ struct TemplateView: View {
 struct EditTemplate: View {
     
     @EnvironmentObject var config: Config
-    
-    @ObservedObject var goals: Goals
+    @EnvironmentObject var goals: Goals
     
     @StateObject var details: TemplateDetails
     
@@ -144,14 +142,14 @@ struct EditTemplate: View {
         let newGoal: Bool = goalId==goals.getGoals().count
         if(newGoal){
             goalId = goals.getGoals().count
-            goals.createGoal(name: goalName)
+            goals.createGoal(name: goalName, config: config)
         }
         goals.changeGoalName(id:goalId, name:goalName)
-        if(newTemplate || newGoal){
+        if(newTemplate){
             goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
         } else if(goalId != originalGoalId){
             goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
-            goals.getGoals()[originalGoalId].removeTemplate(id:id)
+            goals.removeTemplateInGoal(id:id, goalId:originalGoalId, config: config)
         } else {
             goals.replaceTemplateInGoal(id: id, goalId: goalId, template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
         }
@@ -253,5 +251,5 @@ struct EditTemplate: View {
 }
 
 #Preview {
-    TemplatesView().environmentObject(Config()).environmentObject(Strata())
+    TemplatesView().environmentObject(Config()).environmentObject(Strata()).environmentObject(Goals())
 }
