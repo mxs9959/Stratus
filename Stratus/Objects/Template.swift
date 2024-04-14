@@ -8,13 +8,14 @@
 import Foundation
 import SwiftUI
 
-class Template: ObservableObject, Identifiable {
+class Template: ObservableObject, Codable {
     @Published private var name: String
     @Published private var priority: Int = 5 //Range between 0 and 10
     @Published private var mandatory: Bool
     @Published private var duration: Int //Duration in minutes
     @Published private var color: Color
     @Published private var recurrence: Int
+    private var ccolor: CodableColor?
     
     init(name: String, priority: Int, mandatory: Bool, duration: Int, color: Color, recurrence: Int) {
         if(priority>=0 && priority<=10){
@@ -33,8 +34,36 @@ class Template: ObservableObject, Identifiable {
         self.duration = 60
         self.color = Consts.randomColor()
         self.recurrence = 0
+        self.ccolor = nil
     }
     
+    enum CodingKeys: CodingKey {
+        case name
+        case priority
+        case mandatory
+        case duration
+        case ccolor
+        case recurrence
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        priority = try container.decode(Int.self, forKey: .priority)
+        mandatory = try container.decode(Bool.self, forKey: .mandatory)
+        duration = try container.decode(Int.self, forKey: .duration)
+        ccolor = try container.decode(CodableColor.self, forKey: .ccolor)
+        recurrence = try container.decode(Int.self, forKey: .recurrence)
+        color = ccolor!.convertToColor()
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(priority, forKey: .priority)
+        try container.encode(mandatory, forKey: .mandatory)
+        try container.encode(duration, forKey: .duration)
+        try container.encode(CodableColor(color:color), forKey: .ccolor)
+        try container.encode(recurrence, forKey: .recurrence)
+    }
     
     public func getTemplateDetails() -> (String, Int, Bool, Int, Color, Int){
         return (self.name, self.priority, self.mandatory, self.duration, self.color, self.recurrence)
@@ -87,6 +116,23 @@ class Task: Template {
         self.begin = begin
         self.title = "Sample task"
         super.init()
+    }
+    
+    enum CodingKeys: CodingKey {
+        case title
+        case begin
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        title = try container.decode(String.self, forKey: .title)
+        begin = try container.decode(DateTime.self, forKey: .begin)
+        try super.init(from: decoder)
+    }
+    override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(title, forKey: .title)
+        try container.encode(begin, forKey: .begin)
+        try super.encode(to:encoder)
     }
     
     public func setBegin(begin: DateTime){

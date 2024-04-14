@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class Goal: ObservableObject {
+class Goal: ObservableObject, Codable {
     
     @Published private var templates: [Template]
     @Published private var name: String
@@ -20,6 +20,23 @@ class Goal: ObservableObject {
         self.enabled = true
     }
     
+    enum CodingKeys: CodingKey {
+        case templates
+        case name
+        case enabled
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        templates = try container.decode([Template].self, forKey: .templates)
+        name = try container.decode(String.self, forKey: .name)
+        enabled = try container.decode(Bool.self, forKey: .enabled)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(templates, forKey: .templates)
+        try container.encode(name, forKey: .name)
+        try container.encode(enabled, forKey: .enabled)
+    }
     
     public func getTemplates() -> [Template] {
         return self.templates

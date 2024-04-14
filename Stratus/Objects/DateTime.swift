@@ -6,13 +6,39 @@
 //
 
 import Foundation
+import SwiftUI
+import UIKit
 
-class DateTime: ObservableObject {
+class DateTime: ObservableObject, Codable {
     @Published private var day: Int
     @Published private var month: Int
     private var year: Int
     private var hour: Int
     private var minute: Int
+    
+    enum CodingKeys: CodingKey {
+        case day
+        case month
+        case year
+        case hour
+        case minute
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        day = try container.decode(Int.self, forKey: .day)
+        month = try container.decode(Int.self, forKey: .month)
+        year = try container.decode(Int.self, forKey: .year)
+        hour = try container.decode(Int.self, forKey: .hour)
+        minute = try container.decode(Int.self, forKey: .minute)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(day, forKey: .day)
+        try container.encode(month, forKey: .month)
+        try container.encode(year, forKey: .year)
+        try container.encode(hour, forKey: .hour)
+        try container.encode(minute, forKey: .minute)
+    }
     
     public static func getNow(rounded: Bool) -> DateTime {
         let components = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: Date())
@@ -147,4 +173,27 @@ class DateTime: ObservableObject {
             return self.midnight().convertToDate() == dateTime.midnight().convertToDate()
         }
     }
+}
+
+class CodableColor: Codable {
+    
+    private var components: [CGFloat]
+    
+    init(color: Color) {
+        var components: [CGFloat] = []
+        if let c = UIColor(color).cgColor.components {
+            components.append(c[0])
+            components.append(c[1])
+            components.append(c[2])
+            components.append(c[3])
+            self.components = components
+        } else {
+            self.components = [0,0,0,0]
+        }
+    }
+    
+    public func convertToColor() -> Color {
+        return Color(red:components[0], green:components[1], blue:components[2])
+    }
+    
 }

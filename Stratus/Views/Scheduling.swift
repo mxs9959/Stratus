@@ -14,8 +14,6 @@ struct Scheduling: View {
     @EnvironmentObject var config: Config
     @EnvironmentObject var goals: Goals
     
-    
-    
     var body: some View {
         VStack(spacing:0) {
             HStack {

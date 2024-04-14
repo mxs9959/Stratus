@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct Consts {
     
@@ -36,7 +37,7 @@ struct Consts {
     
 }
 
-class Config: ObservableObject {
+class Config: ObservableObject, Codable {
     
     @Published public var sleepBegin: Date
     @Published public var sleepEnd: Date
@@ -44,10 +45,36 @@ class Config: ObservableObject {
     
     @Published public var freeTimeEnabled: Bool
     @Published public var freeTimeTarget: Double
-    
     @Published public var goalsEnabled: [Bool]
     
-    init(){
+    enum CodingKeys: CodingKey {
+        case sleepBegin
+        case sleepEnd
+        case sleepEnabled
+        case freeTimeEnabled
+        case freeTimeTarget
+        case goalsEnabled
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        sleepBegin = try container.decode(Date.self, forKey: .sleepBegin)
+        sleepEnd = try container.decode(Date.self, forKey: .sleepEnd)
+        sleepEnabled = try container.decode(Bool.self, forKey: .sleepEnabled)
+        freeTimeEnabled = try container.decode(Bool.self, forKey: .freeTimeEnabled)
+        freeTimeTarget = try container.decode(Double.self, forKey: .freeTimeTarget)
+        goalsEnabled = try container.decode([Bool].self, forKey: .goalsEnabled)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(sleepBegin, forKey: .sleepBegin)
+        try container.encode(sleepEnd, forKey: .sleepEnd)
+        try container.encode(sleepEnabled, forKey: .sleepEnabled)
+        try container.encode(freeTimeEnabled, forKey: .freeTimeEnabled)
+        try container.encode(freeTimeTarget, forKey: .freeTimeTarget)
+        try container.encode(goalsEnabled, forKey: .goalsEnabled)
+    }
+    
+    init() {
         self.sleepBegin = DateTime(day: 1, month: 1, year: 2024, hour: 22, minute: 0).convertToDate()
         self.sleepEnd = DateTime(day: 2, month: 1, year: 2024, hour: 6, minute: 0).convertToDate()
         self.sleepEnabled = true
@@ -55,8 +82,39 @@ class Config: ObservableObject {
         self.freeTimeEnabled = true
         self.goalsEnabled = [true]
     }
+    
     public func getSleepDisplayRange() -> String {
         return DateTime.convertDateToDT(date: self.sleepBegin).getFormattedTime() + " to " + DateTime.convertDateToDT(date: self.sleepEnd).getFormattedTime()
     }
     
+    public func toJSONString() -> String {
+        var result = ""
+        do {
+            let jsonData = try JSONEncoder().encode(self)
+            if let jsonString = String(data: jsonData, encoding: .utf8){
+                result = jsonString
+            }
+        } catch {
+            print("An error has occurred while encoding config object.")
+        }
+        return result
+    }
+    
+    public func fromJSONString(json: String) {
+        do {
+            if let jsonData = json.data(using: .utf8){
+                let config = try JSONDecoder().decode(Config.self, from: jsonData)
+                self.sleepBegin = config.sleepBegin
+                self.sleepEnd = config.sleepEnd
+                self.sleepEnabled = config.sleepEnabled
+                self.freeTimeTarget = config.freeTimeTarget
+                self.freeTimeEnabled = config.freeTimeEnabled
+                self.goalsEnabled = config.goalsEnabled
+            }
+        } catch {
+            print("An error has occurred while decoding config object.")
+        }
+    }
+    
 }
+

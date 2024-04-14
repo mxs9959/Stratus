@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class Strata: ObservableObject {
+class Strata: ObservableObject, Codable {
     
     @Published private var strata: [Strat]
     @Published private var sleepTime: Int //Sleep time in minutes
@@ -18,6 +18,51 @@ class Strata: ObservableObject {
         self.strata = []
         self.sleepTime = 480
         self.freeTimeTotal = 960
+    }
+    
+    enum CodingKeys: CodingKey {
+        case strata
+        case sleepTime
+        case freeTimeTotal
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        strata = try container.decode([Strat].self, forKey: .strata)
+        sleepTime = try container.decode(Int.self, forKey: .sleepTime)
+        freeTimeTotal = try container.decode(Int.self, forKey: .freeTimeTotal)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(strata, forKey: .strata)
+        try container.encode(sleepTime, forKey: .sleepTime)
+        try container.encode(freeTimeTotal, forKey: .freeTimeTotal)
+    }
+    
+    public func toJSONString() -> String {
+        var result = ""
+        do {
+            let jsonData = try JSONEncoder().encode(self)
+            if let jsonString = String(data: jsonData, encoding: .utf8){
+                result = jsonString
+            }
+        } catch {
+            print("An error has occurred while encoding config object.")
+        }
+        //print("The resulting JSON string is: " + result)
+        return result
+    }
+    
+    public func fromJSONString(json: String) {
+        do {
+            if let jsonData = json.data(using: .utf8){
+                let strata = try JSONDecoder().decode(Strata.self, from: jsonData)
+                self.strata = strata.strata
+                self.sleepTime = strata.sleepTime
+                self.freeTimeTotal = strata.freeTimeTotal
+            }
+        } catch {
+            print("An error has occurred while decoding strata object: \(error).")
+        }
     }
     
     public func addSampleStrat(){
@@ -115,14 +160,52 @@ class Strata: ObservableObject {
         return total
     }
     
+    
+    
 }
 
-class Goals: ObservableObject {
+class Goals: ObservableObject, Codable {
     
     @Published private var goals: [Goal]
     
     init(){
         self.goals = [Goal(name: "Unassigned Templates")]
+    }
+    
+    enum CodingKeys: CodingKey {
+        case goals
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        goals = try container.decode([Goal].self, forKey: .goals)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(goals, forKey: .goals)
+    }
+    
+    public func toJSONString() -> String {
+        var result = ""
+        do {
+            let jsonData = try JSONEncoder().encode(self)
+            if let jsonString = String(data: jsonData, encoding: .utf8){
+                result = jsonString
+            }
+        } catch {
+            print("An error has occurred while encoding config object.")
+        }
+        return result
+    }
+    
+    public func fromJSONString(json: String) {
+        do {
+            if let jsonData = json.data(using: .utf8){
+                let goals = try JSONDecoder().decode(Goals.self, from: jsonData)
+                self.goals = goals.goals
+            }
+        } catch {
+            print("An error has occurred while decoding goals object: \(error).")
+        }
     }
     
     public func manualUpdate(){

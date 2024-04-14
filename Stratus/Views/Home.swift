@@ -9,8 +9,15 @@ import SwiftUI
 
 struct Home: View {
     
+    @AppStorage("newbie") var newbie: Bool = true
+    
+    @AppStorage("config") var configJSON: String = Config().toJSONString()
+    @AppStorage("strata") var strataJSON: String = Strata().toJSONString()
+    @AppStorage("goals") var goalsJSON: String = Goals().toJSONString()
+    
     @EnvironmentObject var config: Config
     @EnvironmentObject var strata: Strata
+    @EnvironmentObject var goals: Goals
     
     @State var editingTask: [[Int]] = []
     
@@ -27,115 +34,131 @@ struct Home: View {
     var body: some View {
         NavigationStack(path:$editingTask) {
             
-            //CONTENT
-            VStack(spacing:0) {
+            ZStack {
                 
-                //HEADER
-                HStack {
-                    NavigationLink(value:[-1,-1,-1]){
-                        Image(systemName:"info.circle")
-                            .imageScale(.large)
-                    }
-                    Text("Your Strats")
-                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                        .bold()
-                        .padding()
-                    NavigationLink(value:[-1,-1]){
-                        Image(systemName:"plus")
-                            .imageScale(.large)
-                    }
-                }
-                .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
-                .background(Color("Header"))
-                
-                //BODY
-                HStack {
-                    Button(action:{showingDate.addDaysToThis(days: -1)}){
-                        Image(systemName:"arrow.left.circle.fill")
-                            .imageScale(.large)
-                            .padding()
-                    }
-                    Spacer()
-                    Text("\(showingDate.getFormattedDate(weekday:true))")
-                            .padding()
+                //CONTENT
+                VStack(spacing:0) {
                     
-                    Spacer()
-                    Button(action:{showingDate.addDaysToThis(days: 1)}){
-                        Image(systemName:"arrow.right.circle.fill")
-                            .imageScale(.large)
+                    //HEADER
+                    HStack {
+                        NavigationLink(value:[-1,-1,-1]){
+                            Image(systemName:"info.circle")
+                                .imageScale(.large)
+                        }
+                        Text("Your Strats")
+                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                            .bold()
                             .padding()
+                        NavigationLink(value:[-1,-1]){
+                            Image(systemName:"plus")
+                                .imageScale(.large)
+                        }
                     }
-                }
-                
-                if(strata.stratsOnDay(day: showingDate)){
-                    //Listing strats
-                    ScrollView {
-                        VStack {
-                            ForEach(0..<strata.getStrata().count, id:\.self){ i in
-                                if(strata.getStrata()[i].getBegin()).equals(dateTime: showingDate, onlyDate: true){
-                                    StratView(strata:strata, id:i)
+                    .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
+                    .background(Color("Header"))
+                    
+                    //BODY
+                    HStack {
+                        Button(action:{showingDate.addDaysToThis(days: -1)}){
+                            Image(systemName:"arrow.left.circle.fill")
+                                .imageScale(.large)
+                                .padding()
+                        }
+                        Spacer()
+                        Text("\(showingDate.getFormattedDate(weekday:true))")
+                            .padding()
+                        
+                        Spacer()
+                        Button(action:{showingDate.addDaysToThis(days: 1)}){
+                            Image(systemName:"arrow.right.circle.fill")
+                                .imageScale(.large)
+                                .padding()
+                        }
+                    }
+                    
+                    if(strata.stratsOnDay(day: showingDate)){
+                        //Listing strats
+                        ScrollView {
+                            VStack {
+                                ForEach(0..<strata.getStrata().count, id:\.self){ i in
+                                    if(strata.getStrata()[i].getBegin()).equals(dateTime: showingDate, onlyDate: true){
+                                        StratView(strata:strata, id:i)
+                                    }
                                 }
                             }
+                            .padding(.vertical, Consts.scrollVerticalPadding)
                         }
-                        .padding(.vertical, Consts.scrollVerticalPadding)
+                    } else {
+                        //If no tasks
+                        Spacer()
+                        Text("You have no strats on this day.")
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        Text(Consts.randomEmoji())
+                            .font(.title)
+                            .padding()
                     }
-                } else {
-                    //If no tasks
                     Spacer()
-                    Text("You have no strats on this day.")
-                        .multilineTextAlignment(.center)
-                        .padding()
-                    Text(Consts.randomEmoji())
-                        .font(.title)
-                        .padding()
-                }
-                Spacer()
-                HStack {
-                    if(config.sleepEnabled){
-                        VStack {
-                            HStack {
-                                Image(systemName:"moon.stars.fill")
-                                    .foregroundStyle(.purple)
-                                Text("Sleep").bold()
-                                    .font(.title3)
-                                
+                    HStack {
+                        if(config.sleepEnabled){
+                            VStack {
+                                HStack {
+                                    Image(systemName:"moon.stars.fill")
+                                        .foregroundStyle(.purple)
+                                    Text("Sleep").bold()
+                                        .font(.title3)
+                                    
+                                }
+                                Text(config.getSleepDisplayRange())
+                                    .font(.subheadline)
                             }
-                            Text(config.getSleepDisplayRange())
-                                .font(.subheadline)
+                            .padding(.all, Consts.scrollPadding)
                         }
-                        .padding(.all, Consts.scrollPadding)
-                    }
-                    if(config.freeTimeEnabled && strata.stratsOnDay(day: showingDate)){
-                        VStack {
-                            Text("\(Int(Double(strata.getFreeTimeForDay(day: showingDate))/(config.freeTimeTarget*60)*100))%")
-                            Text("Free Time Goal Met")
-                                .font(.caption2)
+                        if(config.freeTimeEnabled && strata.stratsOnDay(day: showingDate)){
+                            VStack {
+                                Text("\(Int(Double(strata.getFreeTimeForDay(day: showingDate))/(config.freeTimeTarget*60)*100))%")
+                                Text("Free Time Goal Met")
+                                    .font(.caption2)
+                            }
+                            .foregroundColor(.black)
+                            .padding(.all, Consts.scrollPadding)
+                            .background(Color.accentColor)
+                            .cornerRadius(Consts.cornerRadiusField)
+                            .padding(.trailing, Consts.scrollPadding)
                         }
-                        .foregroundColor(.black)
-                        .padding(.all, Consts.scrollPadding)
-                        .background(Color.accentColor)
-                        .cornerRadius(Consts.cornerRadiusField)
-                        .padding(.trailing, Consts.scrollPadding)
                     }
                 }
-            }
-            .frame(width:UIScreen.main.bounds.width)
-            .background(Color("BodyBackground"))
-            .navigationDestination(for: [Int].self){ids in
-                if(ids.count == 3){
-                    About()
+                .frame(width:UIScreen.main.bounds.width)
+                .background(Color("BodyBackground"))
+                .navigationDestination(for: [Int].self){ids in
+                    if(ids.count == 3){
+                        About()
+                    } else {
+                        EditTask(
+                            details: detailsToPass(ids: ids),
+                            editingTask: $editingTask,
+                            stratId: ids[0],
+                            taskId: ids[1],
+                            newTask: !(ids[0]>=0 && strata.getStrata().count > 0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
+                        )
+                        .navigationBarBackButtonHidden(true)
+                    }
+                }
+                
+                if(newbie){
+                    Welcome(newbie:$newbie)
                 } else {
-                    EditTask(
-                        details: detailsToPass(ids: ids),
-                        editingTask: $editingTask,
-                        stratId: ids[0],
-                        taskId: ids[1],
-                        newTask: !(ids[0]>=0 && strata.getStrata().count > 0 && ids[1] < strata.getStrata()[ids[0]].getTasks().count)
-                    )
-                    .navigationBarBackButtonHidden(true)
+                    //Button("Reset"){newbie = true}
                 }
             }
+            .onAppear(){
+                config.fromJSONString(json: configJSON)
+                strata.fromJSONString(json: strataJSON)
+                goals.fromJSONString(json: goalsJSON)
+            }
+            
         }
+            
     }
 }
 
@@ -258,6 +281,7 @@ struct EditTask: View {
         strata.getStrata()[stratId].updateRange()
         strata.organize()
         editingTask = []
+        
     }
     func delete(){
         if(!newTask){
@@ -331,6 +355,37 @@ struct EditTask: View {
         }
         .frame(width:UIScreen.main.bounds.width)
         .background(Color("BodyBackground"))
+    }
+}
+
+struct Welcome: View {
+    
+    @Binding var newbie: Bool
+    
+    var body: some View {
+        VStack {
+            Text("Welcome to Stratus!")
+                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                .padding()
+            Text("Stratus is designed to help with your scheduling needs.")
+                .multilineTextAlignment(.center)
+                .padding()
+            Text("Please tap to see instructions, or continue! Don't forget to give Max feedback.")
+                .multilineTextAlignment(.center)
+            HStack {
+                Link(destination: URL(string: "mailto:maxscholle@westminster.net")!, label: {
+                    Text("Instructions")
+                })
+                Button("Continue"){
+                    newbie = false
+                }
+            }
+            .padding()
+        }
+        .frame(width:300, height:300)
+        .background(Color("Header"))
+        .cornerRadius(Consts.cornerRadius)
+        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
     }
 }
 

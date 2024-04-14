@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class Strat: ObservableObject {
+class Strat: ObservableObject, Codable {
     
     @Published private var begin: DateTime //Strata cover a certain duration of the user's schedule
     @Published private var end: DateTime
@@ -26,6 +26,27 @@ class Strat: ObservableObject {
         self.end = end
         self.tasks = []
         self.freeTime = true
+    }
+    
+    enum CodingKeys: CodingKey {
+        case begin
+        case end
+        case tasks
+        case freeTime
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        begin = try container.decode(DateTime.self, forKey: .begin)
+        end = try container.decode(DateTime.self, forKey: .end)
+        tasks = try container.decode([Task].self, forKey: .tasks)
+        freeTime = try container.decode(Bool.self, forKey: .freeTime)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(begin, forKey: .begin)
+        try container.encode(end, forKey: .end)
+        try container.encode(tasks, forKey: .tasks)
+        try container.encode(freeTime, forKey: .freeTime)
     }
     
     public func organize(){
