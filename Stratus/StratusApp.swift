@@ -10,6 +10,10 @@ import SwiftUI
 @main
 struct StratusApp: App {
     
+    @AppStorage("config") var configJSON: String = Config().toJSONString()
+    @AppStorage("strata") var strataJSON: String = Strata().toJSONString()
+    @AppStorage("goals") var goalsJSON: String = Goals().toJSONString()
+    
     @StateObject var config = Config()
     @StateObject var strata = Strata()
     @StateObject var goals = Goals()
@@ -37,6 +41,15 @@ struct StratusApp: App {
                             Label("Scheduling", systemImage:"calendar")
                         }
                         .tag(2)
+                }
+                .onReceive(config.objectWillChange){
+                    configJSON = config.toJSONString()
+                }
+                .onReceive(strata.objectWillChange){
+                    strataJSON = strata.toJSONString()
+                }
+                .onReceive(goals.objectWillChange){
+                    goalsJSON = goals.toJSONString()
                 }
                 .toolbarBackground(.visible, for: .tabBar)
                 .toolbarBackground(Color("Header"), for: .tabBar)
