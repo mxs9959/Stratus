@@ -146,12 +146,12 @@ struct EditTemplate: View {
         }
         goals.changeGoalName(id:goalId, name:goalName)
         if(newTemplate){
-            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
+            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence, recurrenceStart: details.recurrenceBegin))
         } else if(goalId != originalGoalId){
-            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
+            goals.getGoals()[goalId].addTemplate(template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence, recurrenceStart: details.recurrenceBegin))
             goals.removeTemplateInGoal(id:id, goalId:originalGoalId, config: config)
         } else {
-            goals.replaceTemplateInGoal(id: id, goalId: goalId, template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence))
+            goals.replaceTemplateInGoal(id: id, goalId: goalId, template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence, recurrenceStart: details.recurrenceBegin))
         }
         goals.manualUpdate()
     }
@@ -233,6 +233,10 @@ struct EditTemplate: View {
                                         Text("Repeat every \(details.recurrence) day(s)")
                                     }
                                 }
+                            }
+                            if(details.recurrence>0){
+                                DatePicker("Begin: ", selection: $details.recurrenceBegin, displayedComponents: [.date, .hourAndMinute])
+                                 
                             }
                         }
                     }

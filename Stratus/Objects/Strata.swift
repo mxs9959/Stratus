@@ -20,6 +20,12 @@ class Strata: ObservableObject, Codable {
         self.freeTimeTotal = 960
     }
     
+    init(strata: [Strat]){
+        self.strata = strata
+        self.sleepTime = 480
+        self.freeTimeTotal = 960
+    }
+    
     enum CodingKeys: CodingKey {
         case strata
         case sleepTime
@@ -48,7 +54,6 @@ class Strata: ObservableObject, Codable {
         } catch {
             print("An error has occurred while encoding config object.")
         }
-        //print("The resulting JSON string is: " + result)
         return result
     }
     
@@ -61,8 +66,37 @@ class Strata: ObservableObject, Codable {
                 self.freeTimeTotal = strata.freeTimeTotal
             }
         } catch {
-            print("An error has occurred while decoding strata object: \(error).")
+            print("An error occurred while decoding strata object: \(error).")
         }
+    }
+    
+    public func generateRecurrentTasks(goals: Goals, config: Config){
+        for i in 0..<goals.getGoals().count{
+            if(config.goalsEnabled[i]){
+                let goal = goals.getGoals()[i]
+                for template in goal.getTemplates(){
+                    if(template.getRecurrence()>0){
+                        for d in 0..<Consts.recurrenceLimit {
+                            let date = DateTime.convertDateToDT(date: template.getRecurrenceStart()).addMinutes(minutes: d*template.getRecurrence()*1440).convertToDate()
+                            self.addTasksToStrat(id: findStrat(begin: date), tasks: [Task(details: TemplateDetails(details: template.getTemplateDetails()), begin: DateTime.convertDateToDT(date: date))])
+                        }
+                    }
+                }
+            }
+        }
+        self.organize()
+    }
+    
+    public func removeRecurrentTasks() -> Strata {
+        let temp = strata
+        for strat in temp {
+            for j in 0..<strat.getTasks().count{
+                if(j<strat.getTasks().count && strat.getTasks()[j].getRecurrence()>0){
+                    strat.removeTask(id: j)
+                }
+            }
+        }
+        return Strata(strata: temp)
     }
     
     public func addSampleStrat(){
@@ -92,38 +126,40 @@ class Strata: ObservableObject, Codable {
     }
     
     public func organize(){
-        var output: [Strat] = [self.strata[0]]
-        for i in 1..<self.strata.count {
-            if(self.strata[i].getFreeTime()){
-                continue
-            }
-            var j = 0
-            while self.strata[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
-                j += 1
+        if(self.strata.count > 0){
+            var output: [Strat] = []
+            for i in 0..<self.strata.count {
+                if(self.strata[i].getFreeTime()){
+                    continue
+                }
+                var j = 0
+                if(j < output.count){
+                    while self.strata[i].getBegin().compareToDate(date: output[j].getBegin().convertToDate())>0{
+                        j += 1
+                        if(j==output.count){
+                            break
+                        }
+                    }
+                }
                 if(j==output.count){
-                    break
+                    output.append(self.strata[i])
+                } else {
+                    output.insert(self.strata[i], at:j)
                 }
             }
-            if(j==output.count){
-                output.append(self.strata[i])
-            } else {
-                output.insert(self.strata[i], at:j)
+            for i in 0..<output.count {
+                if(i<output.count && i>0 && output[i-1].getEnd().compareToDate(date: output[i].getBegin().convertToDate())>=0){
+                    output[i-1].addTasks(tasks: output[i].getTasks())
+                    output.remove(at:i)
+                }
             }
-        }
-        for i in 1..<output.count {
-            if(output[i-1].getEnd().compareToDate(date: output[i].getBegin().convertToDate())>=0){
-                output[i-1].addTasks(tasks: output[i].getTasks())
-                output.remove(at:i)
+            for i in 0..<output.count {
+                if(2*i-1<output.count && 2*i-2>=0 && output[2*i-2].getEnd().convertToDate() == output[2*i-1].getBegin().convertToDate()){
+                    output.insert(Strat(begin: output[2*i-2].getEnd(), end:output[2*i-1].getBegin()), at:2*i-1)
+                }
             }
+            self.strata = output
         }
-        for i in 1..<output.count {
-            output.insert(Strat(begin: output[2*i-2].getEnd(), end:output[2*i-1].getBegin()), at:2*i-1)
-        }
-        self.strata = output
-    }
-    
-    public func populateRecurring(goals: Goals){
-        
     }
     
     public func removeStrat(id: Int){
@@ -159,9 +195,6 @@ class Strata: ObservableObject, Codable {
         }
         return total
     }
-    
-    
-    
 }
 
 class Goals: ObservableObject, Codable {

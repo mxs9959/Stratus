@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct Consts {
     
@@ -34,6 +33,8 @@ struct Consts {
     static func randomEmoji() -> String {
         return funEmojis[Int.random(in:0..<funEmojis.count)]
     }
+    
+    static var recurrenceLimit: Int = 7 //Days to generate
     
 }
 

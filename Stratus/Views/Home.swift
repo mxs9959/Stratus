@@ -153,8 +153,10 @@ struct Home: View {
             }
             .onAppear(){
                 config.fromJSONString(json: configJSON)
-                strata.fromJSONString(json: strataJSON)
+                strata.removeRecurrentTasks().fromJSONString(json: strataJSON)
                 goals.fromJSONString(json: goalsJSON)
+                strata.generateRecurrentTasks(goals: goals, config: config)
+                print(strata.getStrata().count)
             }
             
         }

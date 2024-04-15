@@ -15,9 +15,10 @@ class Template: ObservableObject, Codable {
     @Published private var duration: Int //Duration in minutes
     @Published private var color: Color
     @Published private var recurrence: Int
+    @Published private var recurrenceStart: Date
     private var ccolor: CodableColor?
     
-    init(name: String, priority: Int, mandatory: Bool, duration: Int, color: Color, recurrence: Int) {
+    init(name: String, priority: Int, mandatory: Bool, duration: Int, color: Color, recurrence: Int, recurrenceStart: Date) {
         if(priority>=0 && priority<=10){
             self.priority = priority
         }
@@ -26,6 +27,7 @@ class Template: ObservableObject, Codable {
         self.name = name
         self.color = color
         self.recurrence = recurrence
+        self.recurrenceStart = recurrenceStart
     }
     init(){
         self.name = "Sample template"
@@ -35,6 +37,7 @@ class Template: ObservableObject, Codable {
         self.color = Consts.randomColor()
         self.recurrence = 0
         self.ccolor = nil
+        self.recurrenceStart = DateTime.getNow(rounded: false).convertToDate()
     }
     
     enum CodingKeys: CodingKey {
@@ -44,6 +47,7 @@ class Template: ObservableObject, Codable {
         case duration
         case ccolor
         case recurrence
+        case recurrenceStart
     }
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -53,6 +57,7 @@ class Template: ObservableObject, Codable {
         duration = try container.decode(Int.self, forKey: .duration)
         ccolor = try container.decode(CodableColor.self, forKey: .ccolor)
         recurrence = try container.decode(Int.self, forKey: .recurrence)
+        recurrenceStart = try container.decode(Date.self, forKey: .recurrenceStart)
         color = ccolor!.convertToColor()
     }
     func encode(to encoder: Encoder) throws {
@@ -63,10 +68,11 @@ class Template: ObservableObject, Codable {
         try container.encode(duration, forKey: .duration)
         try container.encode(CodableColor(color:color), forKey: .ccolor)
         try container.encode(recurrence, forKey: .recurrence)
+        try container.encode(recurrenceStart, forKey: .recurrenceStart)
     }
     
-    public func getTemplateDetails() -> (String, Int, Bool, Int, Color, Int){
-        return (self.name, self.priority, self.mandatory, self.duration, self.color, self.recurrence)
+    public func getTemplateDetails() -> (String, Int, Bool, Int, Color, Int, Date){
+        return (self.name, self.priority, self.mandatory, self.duration, self.color, self.recurrence, self.recurrenceStart)
     }
     
     public func setPriority(priority: Int){
@@ -101,6 +107,9 @@ class Template: ObservableObject, Codable {
     public func getRecurrence() -> Int{
         return self.recurrence
     }
+    public func getRecurrenceStart() -> Date{
+        return self.recurrenceStart
+    }
 }
 
 class Task: Template {
@@ -110,12 +119,17 @@ class Task: Template {
     init(priority: Int, mandatory: Bool, duration: Int, begin: DateTime, color: Color, title: String){
         self.begin = begin
         self.title = title
-        super.init(name: "custom", priority: priority, mandatory: mandatory, duration: duration, color:color, recurrence:0)
+        super.init(name: "custom", priority: priority, mandatory: mandatory, duration: duration, color:color, recurrence:0, recurrenceStart: DateTime.getNow(rounded: false).convertToDate())
     }
     init(begin: DateTime){
         self.begin = begin
         self.title = "Sample task"
         super.init()
+    }
+    init(details: TemplateDetails, begin: DateTime){
+        self.begin = begin
+        self.title = details.name
+        super.init(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence, recurrenceStart: DateTime.getNow(rounded: false).convertToDate())
     }
     
     enum CodingKeys: CodingKey {
@@ -156,7 +170,6 @@ class Task: Template {
     
 }
 
-
 class TemplateDetails: ObservableObject {
     
     @Published public var name: String
@@ -165,14 +178,16 @@ class TemplateDetails: ObservableObject {
     @Published public var duration: String
     @Published public var color: Color
     @Published public var recurrence: Int
+    @Published public var recurrenceBegin: Date
     
-    init(details: (String, Int, Bool, Int, Color, Int)){
+    init(details: (String, Int, Bool, Int, Color, Int, Date)){
         self.name = details.0
         self.priority = Double(details.1)
         self.mandatory = details.2
         self.duration = "\(details.3)"
         self.color = details.4
         self.recurrence = details.5
+        self.recurrenceBegin = details.6
     }
     init(){
         self.name = "Sample template"
@@ -181,6 +196,7 @@ class TemplateDetails: ObservableObject {
         self.duration = "60"
         self.color = Consts.randomColor()
         self.recurrence = 0
+        self.recurrenceBegin = DateTime.getNow(rounded: false).convertToDate()
     }
 }
 
@@ -192,13 +208,13 @@ class TaskDetails: TemplateDetails {
     init(details: (String, Int, Bool, Int, Color, DateTime)){
         self.title = details.0
         self.begin = details.5.convertToDate()
-        super.init(details:("custom", details.1, details.2, details.3, details.4, 0))
+        super.init(details:("custom", details.1, details.2, details.3, details.4, 0, details.5.convertToDate()))
     }
     
-    override init(details: (String, Int, Bool, Int, Color, Int)){
+    override init(details: (String, Int, Bool, Int, Color, Int, Date)){
         self.title = details.0
         self.begin = DateTime.getNow(rounded:false).convertToDate()
-        super.init(details:("custom", details.1, details.2, details.3, details.4, details.5))
+        super.init(details:("custom", details.1, details.2, details.3, details.4, details.5, details.6))
     }
     
     public static func getSampleDetails() -> (String, Int, Bool, Int, Color, DateTime){
