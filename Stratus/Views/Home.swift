@@ -11,10 +11,6 @@ struct Home: View {
     
     @AppStorage("newbie") var newbie: Bool = true
     
-    @AppStorage("config") var configJSON: String = Config().toJSONString()
-    @AppStorage("strata") var strataJSON: String = Strata().toJSONString()
-    @AppStorage("goals") var goalsJSON: String = Goals().toJSONString()
-    
     @EnvironmentObject var config: Config
     @EnvironmentObject var strata: Strata
     @EnvironmentObject var goals: Goals
@@ -33,13 +29,8 @@ struct Home: View {
     
     var body: some View {
         NavigationStack(path:$editingTask) {
-            
             ZStack {
-                
-                //CONTENT
                 VStack(spacing:0) {
-                    
-                    //HEADER
                     HStack {
                         NavigationLink(value:[-1,-1,-1]){
                             Image(systemName:"info.circle")
@@ -56,8 +47,6 @@ struct Home: View {
                     }
                     .frame(width:UIScreen.main.bounds.width, height: Consts.headerHeight)
                     .background(Color("Header"))
-                    
-                    //BODY
                     HStack {
                         Button(action:{showingDate.addDaysToThis(days: -1)}){
                             Image(systemName:"arrow.left.circle.fill")
@@ -75,9 +64,7 @@ struct Home: View {
                                 .padding()
                         }
                     }
-                    
                     if(strata.stratsOnDay(day: showingDate)){
-                        //Listing strats
                         ScrollView {
                             VStack {
                                 ForEach(0..<strata.getStrata().count, id:\.self){ i in
@@ -89,7 +76,6 @@ struct Home: View {
                             .padding(.vertical, Consts.scrollVerticalPadding)
                         }
                     } else {
-                        //If no tasks
                         Spacer()
                         Text("You have no strats on this day.")
                             .multilineTextAlignment(.center)
@@ -144,23 +130,11 @@ struct Home: View {
                         .navigationBarBackButtonHidden(true)
                     }
                 }
-                
                 if(newbie){
                     Welcome(newbie:$newbie)
-                } else {
-                    //Button("Reset"){newbie = true}
                 }
             }
-            .onAppear(){
-                config.fromJSONString(json: configJSON)
-                strata.removeRecurrentTasks().fromJSONString(json: strataJSON)
-                goals.fromJSONString(json: goalsJSON)
-                strata.generateRecurrentTasks(goals: goals, config: config)
-                print(strata.getStrata().count)
-            }
-            
         }
-            
     }
 }
 
@@ -219,8 +193,8 @@ struct TaskView: View {
     }
     
     var body: some View {
-        if(strata.getStrata().count > stratId){ //Subsequent bug fix
-            if(strata.getStrata()[stratId].getTasks().count > id){ //Fixed index-out-of-range bug
+        if(strata.getStrata().count > stratId){
+            if(strata.getStrata()[stratId].getTasks().count > id){
                 NavigationLink(value: [stratId, id]){
                     VStack {
                         HStack {

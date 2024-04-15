@@ -54,7 +54,10 @@ struct Scheduling: View {
                             Toggle(isOn:$config.goalsEnabled[i]){
                                 Text(goals.getGoals()[i].getName())
                             }
-                            .onChange(of: config.goalsEnabled[i], {goals.updateFromConfig(config: config)})
+                            .onChange(of: config.goalsEnabled[i], {
+                                goals.updateFromConfig(config: config)
+                                    strata.removeRecurrentTasks().generateRecurrentTasks(goals: goals)
+                                })
                         }
                     }
                 }

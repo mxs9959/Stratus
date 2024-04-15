@@ -42,6 +42,13 @@ struct StratusApp: App {
                         }
                         .tag(2)
                 }
+                .onAppear(){
+                    config.fromJSONString(json: configJSON)
+                    strata.fromJSONString(json: strataJSON)
+                    let _ = strata.removeRecurrentTasks()
+                    goals.fromJSONString(json: goalsJSON)
+                    strata.generateRecurrentTasks(goals: goals)
+                }
                 .onReceive(config.objectWillChange){
                     configJSON = config.toJSONString()
                 }

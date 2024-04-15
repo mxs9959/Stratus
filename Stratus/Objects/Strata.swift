@@ -69,10 +69,9 @@ class Strata: ObservableObject, Codable {
             print("An error occurred while decoding strata object: \(error).")
         }
     }
-    
-    public func generateRecurrentTasks(goals: Goals, config: Config){
+    public func generateRecurrentTasks(goals: Goals){
         for i in 0..<goals.getGoals().count{
-            if(config.goalsEnabled[i]){
+            if(goals.getGoals()[i].getEnabled()){
                 let goal = goals.getGoals()[i]
                 for template in goal.getTemplates(){
                     if(template.getRecurrence()>0){
@@ -88,15 +87,17 @@ class Strata: ObservableObject, Codable {
     }
     
     public func removeRecurrentTasks() -> Strata {
-        let temp = strata
-        for strat in temp {
+        for i in 0..<strata.count {
+            let l = strata.count - 1 - i
+            let strat = strata[l]
             for j in 0..<strat.getTasks().count{
-                if(j<strat.getTasks().count && strat.getTasks()[j].getRecurrence()>0){
-                    strat.removeTask(id: j)
+                let k = strat.getTasks().count - 1 - j
+                if(k>=0 && k<strat.getTasks().count && strat.getTasks()[k].getRecurrence()>0){
+                    strat.removeTask(id: k)
                 }
             }
         }
-        return Strata(strata: temp)
+        return self
     }
     
     public func addSampleStrat(){
@@ -153,9 +154,9 @@ class Strata: ObservableObject, Codable {
                     output.remove(at:i)
                 }
             }
-            for i in 0..<output.count {
-                if(2*i-1<output.count && 2*i-2>=0 && output[2*i-2].getEnd().convertToDate() == output[2*i-1].getBegin().convertToDate()){
-                    output.insert(Strat(begin: output[2*i-2].getEnd(), end:output[2*i-1].getBegin()), at:2*i-1)
+            for i in 0..<output.count-1 {
+                if(2*i+1<output.count && output[2*i].getEnd().equals(dateTime: output[2*i+1].getBegin(), onlyDate: true)){
+                    output.insert(Strat(begin: output[2*i].getEnd(), end:output[2*i+1].getBegin()), at:2*i+1)
                 }
             }
             self.strata = output
@@ -278,6 +279,7 @@ class Goals: ObservableObject, Codable {
             self.goals.remove(at: goalId)
             self.refreshGoalsEnabled(config: config)
         }
+        self.manualUpdate()
         
     }
     
@@ -296,6 +298,7 @@ class Goals: ObservableObject, Codable {
         for i in 0..<self.goals.count {
             self.goals[i].setEnabled(enabled: config.goalsEnabled[i])
         }
+        
     }
     
 }

@@ -79,8 +79,10 @@ class Strat: ObservableObject, Codable {
     public func updateRange(){
         if(!self.freeTime){
             self.organize()
-            self.begin = self.tasks[0].getBegin()
-            self.end = self.tasks[self.tasks.count-1].getBegin().addMinutes(minutes: self.tasks[self.tasks.count-1].getDuration())
+            if(tasks.count>0){
+                self.begin = self.tasks[0].getBegin()
+                self.end = self.tasks[self.tasks.count-1].getBegin().addMinutes(minutes: self.tasks[self.tasks.count-1].getDuration())
+            }
         }
     }
     
@@ -91,8 +93,6 @@ class Strat: ObservableObject, Codable {
             return self.begin.getFormattedTime() + " to " + self.end.getFormattedTime()
         }
     }
-    
-
     public func overlapsPrevious(index: Int) -> Bool{
         if(index > 0){
             return self.tasks[index].getBegin().compareToDate(date: self.tasks[index-1].getEnd().convertToDate()) < 0

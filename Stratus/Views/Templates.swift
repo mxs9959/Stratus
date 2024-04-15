@@ -123,6 +123,7 @@ struct TemplateView: View {
 
 struct EditTemplate: View {
     
+    @EnvironmentObject var strata: Strata
     @EnvironmentObject var config: Config
     @EnvironmentObject var goals: Goals
     
@@ -153,6 +154,7 @@ struct EditTemplate: View {
         } else {
             goals.replaceTemplateInGoal(id: id, goalId: goalId, template: Template(name: details.name, priority: Int(details.priority), mandatory: details.mandatory, duration: Int(details.duration) ?? 60, color: details.color, recurrence: details.recurrence, recurrenceStart: details.recurrenceBegin))
         }
+        strata.removeRecurrentTasks().generateRecurrentTasks(goals: goals)
         goals.manualUpdate()
     }
     
