@@ -70,12 +70,14 @@ class Strata: ObservableObject, Codable {
         }
     }
     public func generateRecurrentTasks(goals: Goals){
+        var c = 0
         for i in 0..<goals.getGoals().count{
             if(goals.getGoals()[i].getEnabled()){
                 let goal = goals.getGoals()[i]
                 for template in goal.getTemplates(){
                     if(template.getRecurrence()>0){
                         for d in 0..<Consts.recurrenceLimit {
+                            c+=1
                             let date = DateTime.convertDateToDT(date: template.getRecurrenceStart()).addMinutes(minutes: d*template.getRecurrence()*1440).convertToDate()
                             self.addTasksToStrat(id: findStrat(begin: date), tasks: [Task(details: TemplateDetails(details: template.getTemplateDetails()), begin: DateTime.convertDateToDT(date: date))])
                         }
@@ -87,13 +89,13 @@ class Strata: ObservableObject, Codable {
     }
     
     public func removeRecurrentTasks() -> Strata {
-        for i in 0..<strata.count {
-            let l = strata.count - 1 - i
-            let strat = strata[l]
-            for j in 0..<strat.getTasks().count{
-                let k = strat.getTasks().count - 1 - j
-                if(k>=0 && k<strat.getTasks().count && strat.getTasks()[k].getRecurrence()>0){
-                    strat.removeTask(id: k)
+        var c = 0
+        for strat in strata {
+            let ref = strat.getTasks().count-1
+            for i in 0..<strat.getTasks().count{
+                if(strat.getTasks()[ref-i].getRecurrence()>0){
+                    strat.removeTask(id: ref-i)
+                    c+=1
                 }
             }
         }
@@ -148,13 +150,13 @@ class Strata: ObservableObject, Codable {
                     output.insert(self.strata[i], at:j)
                 }
             }
-            for i in 0..<output.count {
-                if(i<output.count && i>0 && output[i-1].getEnd().compareToDate(date: output[i].getBegin().convertToDate())>=0){
+            for i in 1..<output.count {
+                if(i<output.count && output[i-1].getEnd().compareToDate(date: output[i].getBegin().convertToDate())>=0){
                     output[i-1].addTasks(tasks: output[i].getTasks())
                     output.remove(at:i)
                 }
             }
-            for i in 0..<output.count-1 {
+            for i in 0..<output.count {
                 if(2*i+1<output.count && output[2*i].getEnd().equals(dateTime: output[2*i+1].getBegin(), onlyDate: true)){
                     output.insert(Strat(begin: output[2*i].getEnd(), end:output[2*i+1].getBegin()), at:2*i+1)
                 }
