@@ -98,18 +98,14 @@ struct TemplateView: View {
         if(goalId<goals.getGoals().count && id<goals.getGoals()[goalId].getTemplates().count){
             NavigationLink(value:[-goalId-1,id]){
                 HStack {
-                    Text(getThisTemplate().getName())
+                    Text(getThisTemplate().getName() + ((getThisTemplate().getRecurrence() > 1) ? (": every \(getThisTemplate().getRecurrence()) days") : ((getThisTemplate().getRecurrence() > 0) ? ": every day" : "")))
                         .foregroundColor(.black)
                         .padding(.leading, Consts.scrollPadding)
                     if(getThisTemplate().getMandatory()){
                         Image(systemName: "star.fill")
                     }
                     Spacer()
-                    if(getThisTemplate().getRecurrence() > 0){
-                        Text("\(getThisTemplate().getRecurrence())")
-                    }
-                    Spacer()
-                    Text("\(getThisTemplate().getPriority())")
+                    Text("Priority: " + "\(getThisTemplate().getPriority())")
                         .foregroundColor(.black)
                         .padding(.all, Consts.scrollPadding)
                         .background(getThisTemplate().getColor())
